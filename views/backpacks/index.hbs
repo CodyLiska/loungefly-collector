@@ -1,34 +1,51 @@
-<h1>INDEX.hbs Page </h1>
-<div class="row"></div>
-  <div class="col s12 m8">
-    <h3>{{backpack.bg_name}}
-      {{!-- <small>{{{editIcon backpack.user user backpack.id false}}}</small> --}}
-    </h3>
-    <div class="card story">
-      <div class="card-content">
-        <img
-              src="{{bg_image}}"
-              alt="{{bg_name}}"
-              style="width: 90px; height: 100px;"
-            />
-        <h3>${{backpack.bg_price}}</h3>
-        <h3>{{backpack.bg_series}}</h3>
-        <h3>{{backpack.bg_link}}</h3>
-        <h3>{{backpack.bg_fromSite}}</h3>
-        <h3>{{backpack.createdAt}}</h3>
-        <span class="card-title">{{formatDate date 'MMMM Do YYYY, h:mm:ss a'}}</span>
+{{!-- TODO: CHANGE FILE NAME TO SEARCH.hbs to better aling name with use --}}
+
+<h1>Backpacks</h1>
+<ul class="search-form">
+  <li>
+    <form id="search-site" action="/backpacks/search/:query" method="get">
+      <div class="input-group">
+        <i class="fas fa-search fa-large"></i>
+        <div class="input-field">
+          <input
+            id="search"
+            type="search"
+            name="query"
+            placeholder="Search by name"
+          />
+          <label class="label-icon" for="search">
+          </label>
+        </div>
+        <button type="submit" class="input-group-addon btn">search</button>
+      </div>
+    </form>
+  </li>
+</ul>
+<div class="row">
+  {{#each backpacks}}
+    <div class="col s12 m4">
+      {{!-- <div class="card">
+        <div class="card-image">
+          {{{editIcon backpackUser ../loggedUser backpackId}}}  user is the user the story belongs to | ../user is the logged in user 
+        </div>
+      </div> --}}
+      <div class="card-conetent center-align">
+        <h6>{{bg_name}}</h6>
+        <img src="{{bg_image}}" alt="{{bg_name}}" />
+        <p><strong>PRICE:</strong> ${{bg_price}}</p>
+        <p><strong>SERIES/COLLECTION:</strong> {{bg_series}}</p>
+        <p><strong>LINK:</strong> <a href="{{bg_link}}">View the Bag</a></p>
+        <p><strong>FROM:</strong> {{bg_fromSite}}</p>
+        <p>{{createdAt}}</p>
+        <br />
+      </div>
+      <div class="card-action center-align">
+        <form action="/backpacks/addToCollection/{{_id}}" method="POST">
+          <button type="submit" class="btn btn-primary">Add to Collection</button>
+        </form>
       </div>
     </div>
-  </div>
-  <div class="col s12 m4">
-    <div class="card center-align">
-      <div class="card-content">
-        <span class="card-title">{{backpack.user.displayName}}</span>
-        <img src="{{backpack.user.image}}" class="circle responsive-img img-small">
-      </div>
-      <div class="card-action">
-        <a href="/backpacks/user/{{backpack.user._id}}">More From {{backpack.user.firstName}}</a>
-      </div>
-    </div>
-  </div>
+  {{else}}
+    <p>No Backpacks to display</p>
+  {{/each}}
 </div>

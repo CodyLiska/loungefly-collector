@@ -5,13 +5,13 @@ const { ensureAuth } = require("../middleware/auth");
 const Backpack = require("../models/Backpack");
 const User = require("../models/User");
 
-// @desc    Show add backpack page
+// @desc    Show the add.hbs page
 // @route   GET /backpacks/add
 router.get("/add", ensureAuth, (req, res) => {
   res.render("backpacks/add");
 });
 
-// @desc    Process the Add Form
+// @desc    Process the add form
 // @route   POST /backpacks
 router.post("/", ensureAuth, async (req, res) => {
   try {
@@ -24,7 +24,7 @@ router.post("/", ensureAuth, async (req, res) => {
   }
 });
 
-// // @desc    Show user's collection
+// // @desc    Show user's backpack collection page
 // // @route   GET /backpacks
 router.get("/", ensureAuth, async (req, res) => {
   try {
@@ -40,7 +40,7 @@ router.get("/", ensureAuth, async (req, res) => {
   }
 });
 
-// @desc    Users backpacks
+// @desc    Shows backpack collection by User Id (**NOT BEING USED**)
 // @route   GET /backpacks/user/:id (only show the stories of the user in the URL)
 router.get("/user/:userId", ensureAuth, async (req, res) => {
   try {
@@ -59,7 +59,7 @@ router.get("/user/:userId", ensureAuth, async (req, res) => {
   }
 });
 
-// @desc    Show single backpack
+// @desc    Show a single backpack by id
 // @route   GET /backpacks/:id
 router.get("/show/:id", ensureAuth, async (req, res) => {
   try {
@@ -80,7 +80,7 @@ router.get("/show/:id", ensureAuth, async (req, res) => {
   }
 });
 
-// @desc    Show edit page
+// @desc    Edit a backpack by id
 // @route   GET /backpacks/edit/:id
 router.get("/edit/:id", ensureAuth, async (req, res) => {
   try {
@@ -104,7 +104,7 @@ router.get("/edit/:id", ensureAuth, async (req, res) => {
   }
 });
 
-// @desc    Update backpack
+// @desc    Update a backpack by id
 // @route   PUT /backpacks/:id
 router.put("/:id", ensureAuth, async (req, res) => {
   try {
@@ -134,7 +134,7 @@ router.put("/:id", ensureAuth, async (req, res) => {
   }
 });
 
-// @desc    Delete backpack
+// @desc    Delete a backpack by id
 // @route   DELETE /backpacks/:id
 router.delete("/:id", ensureAuth, async (req, res) => {
   try {
@@ -164,7 +164,7 @@ router.delete("/:id", ensureAuth, async (req, res) => {
   }
 });
 
-// @desc    Show Loungefly Database search page
+// @desc    Show the search page
 // @route   GET /backpacks/search/:query
 router.get("/search/:query", ensureAuth, async (req, res) => {
   try {
@@ -174,14 +174,14 @@ router.get("/search/:query", ensureAuth, async (req, res) => {
       .populate("user")
       .sort({ createdAt: "desc" })
       .lean();
-    res.render("backpacks", { backpacks });
+    res.render("backpacks/index", { backpacks });
   } catch (err) {
     console.log(err);
     res.render("error/404");
   }
 });
 
-// @desc    Add Loungefly backpack to users collection array
+// @desc    Add a backpack to users collection array
 // @route   POST /backpacks/addToCollection/:id
 router.post("/addToCollection/:id", ensureAuth, async (req, res) => {
   try {
