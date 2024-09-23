@@ -1,0 +1,82 @@
+<h3>Edit Story</h3>
+<div class="row">
+  <form action="/backpacks/{{backpack._id}}" method="POST" class="col s12">
+    <input type="hidden" name="_method" value="PUT" />
+    <div class="row">
+      <div class="input-field">
+        <input
+          type="text"
+          id="bg_name"
+          name="bg_name"
+          value="{{backpack.bg_name}}"
+        />
+        <label for="title">Name</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field">
+        <input
+          type="text"
+          id="bg_image"
+          name="bg_image"
+          value="{{backpack.bg_image}}"
+        />
+        <label for="status">Image</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field">
+        <input
+          type="text"
+          id="bg_price"
+          name="bg_price"
+          value="{{backpack.bg_price}}"
+        />
+        <label for="status">Price</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field">
+        <input
+          type="text"
+          id="bg_series"
+          name="bg_series"
+          value="{{backpack.bg_series}}"
+        />
+        <label for="status">Series/Collection</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field">
+        <input
+          type="text"
+          id="bg_link"
+          name="bg_link"
+          value="{{backpack.bg_link}}"
+        />
+        <label for="status">Link</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field">
+        <input
+          type="text"
+          id="bg_fromSite"
+          name="bg_fromSite"
+          value="{{backpack.bg_fromSite}}"
+        />
+        <label for="status">Website</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <input type="submit" value="Save" class="btn" />
+      <a href="/dashboard" class="btn orange">Cancel</a>
+    </div>
+  </form>
+</div>

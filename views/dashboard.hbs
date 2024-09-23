@@ -1,0 +1,51 @@
+<h6>Dashboard</h6>
+<h3>Welcome {{name}}</h3>
+<p>Here Is Your Collection</p>
+{{#if backpacks}}
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Price</th>
+        <th>Series/Collection</th>
+        <th>Link</th>
+        <th>Website</th>
+        <th>Date Added</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each backpacks}}
+        <tr>
+          <td><a href="/backpacks/show/{{_id}}">{{bg_name}}</a></td>
+          <td>
+            <img
+              src="{{bg_image}}"
+              alt="{{bg_name}}"
+              style="width: 90px; height: 100px;"
+            />
+          </td>
+          <td>${{bg_price}}</td>
+          <td>{{bg_series}}</td>
+          <td><a href="{{bg_link}}" target="_blank">View the Backpack</a></td>
+          <td>{{bg_fromSite}}</td>
+          <td>{{formatDate createdAt "MMM Do YYYY, h:mm:ss a"}}</td>
+          <td>
+            <a href="/backpacks/edit/{{_id}}" class="btn btn-float">
+              <i class="fas fa-edit"></i>
+            </a>
+            <form action="/backpacks/show/{{_id}}" method="POST" id="delete-form">
+              <input type="hidden" name="_method" value="DELETE" />
+              <button type="submit" class="btn red">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <p>You do not have any backpacks added to your collection</p>
+{{/if}}

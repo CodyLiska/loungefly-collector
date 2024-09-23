@@ -1,0 +1,34 @@
+<h1>Single Backpack View Page --WANT THIS TO BE THE SINGLE BACKPACK VEIW PAGE--</h1>
+<div class="row"></div>
+  <div class="col s12 m8">
+    <h3>{{backpack.bg_name}}
+      {{!-- <small>{{{editIcon backpack.user user backpack.id false}}}</small> --}}
+    </h3>
+    <div class="card story">
+      <div class="card-content">
+        <img
+              src="{{bg_image}}"
+              alt="{{bg_name}}"
+              style="width: 90px; height: 100px;"
+            />
+        <h3>${{backpack.bg_price}}</h3>
+        <h3>{{backpack.bg_series}}</h3>
+        <h3>{{backpack.bg_link}}</h3>
+        <h3>{{backpack.bg_fromSite}}</h3>
+        <h3>{{backpack.createdAt}}</h3>
+        <span class="card-title">{{formatDate date 'MMMM Do YYYY, h:mm:ss a'}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col s12 m4">
+    <div class="card center-align">
+      <div class="card-content">
+        <span class="card-title">{{backpack.user.displayName}}</span>
+        <img src="{{backpack.user.image}}" class="circle responsive-img img-small">
+      </div>
+      <div class="card-action">
+        <a href="/backpacks/user/{{backpack.user._id}}">More From {{backpack.user.firstName}}</a>
+      </div>
+    </div>
+  </div>
+</div>
