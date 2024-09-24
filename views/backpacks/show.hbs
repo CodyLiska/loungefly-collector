@@ -1,4 +1,3 @@
-<h1>Single Backpack View Page --WANT THIS TO BE THE SINGLE BACKPACK VEIW PAGE--</h1>
 <div class="row"></div>
   <div class="col s12 m8">
     <h3>{{backpack.bg_name}}
@@ -6,21 +5,18 @@
     </h3>
     <div class="card story">
       <div class="card-content">
-        <img
-              src="{{bg_image}}"
-              alt="{{bg_name}}"
-              style="width: 90px; height: 100px;"
-            />
-        <h3>${{backpack.bg_price}}</h3>
-        <h3>{{backpack.bg_series}}</h3>
-        <h3>{{backpack.bg_link}}</h3>
-        <h3>{{backpack.bg_fromSite}}</h3>
-        <h3>{{backpack.createdAt}}</h3>
-        <span class="card-title">{{formatDate date 'MMMM Do YYYY, h:mm:ss a'}}</span>
+        <img src="{{backpack.bg_image}}" alt="{{backpack.bg_name}}" />
+        <p><strong>PRICE:</strong> ${{backpack.bg_price}}</p>
+        <p><strong>SERIES/COLLECTION:</strong> {{backpack.bg_series}}</p>
+        <p><strong>LINK:</strong> <a href="{{backpack.bg_link}}">View the Bag</a></p>
+        <p><strong>FROM:</strong> {{backpack.bg_fromSite}}</p>
+        <p>{{backpack.createdAt}}</p>
+        <p><strong>DATE ADDED:</strong> {{formatDate date 'MMMM Do YYYY, h:mm:ss a'}}</p>
       </div>
     </div>
   </div>
-  <div class="col s12 m4">
+  {{!-- Below is to display the google account avatar in the show.hbs --}}
+  {{!-- <div class="col s12 m4">
     <div class="card center-align">
       <div class="card-content">
         <span class="card-title">{{backpack.user.displayName}}</span>
@@ -30,5 +26,5 @@
         <a href="/backpacks/user/{{backpack.user._id}}">More From {{backpack.user.firstName}}</a>
       </div>
     </div>
-  </div>
+  </div> --}}
 </div>
