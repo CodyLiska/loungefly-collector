@@ -29,13 +29,13 @@ Tutorial Video - https://www.youtube.com/watch?v=SBvmnHTQIPY
 - [x] add a backpack to the users collection array from the loungeflies database
 ---
 #### Not sure if these endpoints will be needed:
-- [ ] Show single backpack (not sure if this is needed?)
+- [x] Show single backpack
 - [x] Show edit page 
 - [x] Update backpack
 ---
 #### UI:
 - [ ] Clean up backpack pages
-- [ ] Clean up error pages
+- [ ] Clean up error pages <--??
 - [ ] Clean up layout pages
 - [ ] Clean up partial pages
 - [ ] Clean up dashboard page
