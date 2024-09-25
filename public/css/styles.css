@@ -19,3 +19,14 @@ p {
 .img-small {
   width: 180px;
 }
+
+.showImage {
+  display: inline-block; 
+  max-width: 800px; 
+  max-height: 800px;
+}
+
+.showImage img {
+  max-width: 100%; 
+  height:auto;
+}
