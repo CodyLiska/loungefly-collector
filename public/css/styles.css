@@ -20,13 +20,10 @@ p {
   width: 180px;
 }
 
-.showImage {
-  display: inline-block; 
-  max-width: 800px; 
-  max-height: 800px;
+.card-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
 }
 
-.showImage img {
-  max-width: 100%; 
-  height:auto;
-}

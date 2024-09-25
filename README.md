@@ -40,6 +40,7 @@ Tutorial Video - https://www.youtube.com/watch?v=SBvmnHTQIPY
 - [ ] Clean up partial pages
 - [ ] Clean up dashboard page
 - [ ] Clean up login page
+- [ ] Date/Time Added is not saving correct
 ---
 #### NOTES FOR NEXT SESSION
 - [ ] Searching the loungeflies database page works but layout needs to be cleaned up
