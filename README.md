@@ -14,24 +14,15 @@ Tutorial Video - https://www.youtube.com/watch?v=SBvmnHTQIPY
 - [ ] Clean up and veryify secure
 ---
 #### CONTROLLERS:
-- [ ] Create controller files
+- [x] Create controller files
+- [ ] check the users backpack array to see if backpack exists before adding (addUserCreatedBackpack && addBackpackFromDatabase)
+- [ ] figure out if update is functionality that is needed, bc rn the users collection array hold a reference to the backpack in the database and not a different object
 --- 
 #### AUTH:
 - [x] Google oauth2 
 ---
 #### ROUTES:
-- [x] Add backpack 
-- [x] Process the Add Form 
-- [x] Show all backpacks in collection
-- [x] Delete backpack 
-- [x] Display a Users' collection
-- [x] Search the loungeflies database
-- [x] add a backpack to the users collection array from the loungeflies database
----
-#### Not sure if these endpoints will be needed:
-- [x] Show single backpack
-- [x] Show edit page 
-- [x] Update backpack
+- [ ] 
 ---
 #### UI:
 - [ ] Clean up backpack pages
