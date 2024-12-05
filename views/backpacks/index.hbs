@@ -1,51 +1,198 @@
-{{!-- TODO: CHANGE FILE NAME TO SEARCH.hbs to better aling name with use --}}
-
-<h1>Backpacks</h1>
-<ul class="search-form">
-  <li>
-    <form id="search-site" action="/backpacks/search/:query" method="get">
-      <div class="input-group">
-        <i class="fas fa-search fa-large"></i>
-        <div class="input-field">
-          <input
-            id="search"
-            type="search"
-            name="query"
-            placeholder="Search by name"
-          />
-          <label class="label-icon" for="search">
-          </label>
-        </div>
-        <button type="submit" class="input-group-addon btn">search</button>
-      </div>
-    </form>
-  </li>
-</ul>
-<div class="row">
-  {{#each backpacks}}
-    <div class="col s12 m4">
-      {{!-- <div class="card">
-        <div class="card-image">
-          {{{editIcon backpackUser ../loggedUser backpackId}}}  user is the user the story belongs to | ../user is the logged in user 
-        </div>
-      </div> --}}
-      <div class="card-conetent center-align">
-        <h6><a href="/backpacks/show/{{_id}}">{{bg_name}}</a></h6>
-        <img src="{{bg_image}}" alt="{{bg_name}}" style="width: 90px; height: 100px;" />
-        <p><strong>PRICE:</strong> ${{bg_price}}</p>
-        <p><strong>SERIES/COLLECTION:</strong> {{bg_series}}</p>
-        <p><strong>LINK:</strong> <a href="{{bg_link}}">View the Bag</a></p>
-        <p><strong>FROM:</strong> {{bg_fromSite}}</p>
-        <p>{{createdAt}}</p>
-        <br />
-      </div>
-      <div class="card-action center-align">
-        <form action="/backpacks/addToCollection/{{_id}}" method="POST">
-          <button type="submit" class="btn btn-primary">Add to Collection</button>
-        </form>
+<div class="min-h-screen bg-gray-50">
+  <!-- Search Section -->
+  {{#if isCollection}}
+  <div class="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-3xl p-8 mb-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <h1 class="text-3xl font-bold text-gray-900">My Collection</h1>
+      
+      {{!-- Filter Buttons --}}
+      <div class="flex items-center gap-2">
+        <a 
+          href="/backpacks?filter=all" 
+          class="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{#if (eq currentFilter 'all')}}bg-primary text-white{{else}}bg-white text-gray-700 hover:bg-gray-50{{/if}}"
+        >
+          All
+        </a>
+        <a 
+          href="/backpacks?filter=owned" 
+          class="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{#if (eq currentFilter 'owned')}}bg-green-600 text-white{{else}}bg-white text-gray-700 hover:bg-gray-50{{/if}}"
+        >
+          <i class="fas fa-check-circle mr-1"></i> Owned
+        </a>
+        <a 
+          href="/backpacks?filter=wishlist" 
+          class="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{#if (eq currentFilter 'wishlist')}}bg-blue-600 text-white{{else}}bg-white text-gray-700 hover:bg-gray-50{{/if}}"
+        >
+          <i class="fas fa-heart mr-1"></i> Wishlist
+        </a>
       </div>
     </div>
+  </div>
   {{else}}
-    <p>No Backpacks to display</p>
-  {{/each}}
+  <div class="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-3xl p-8 mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">Find Backpacks</h1>
+
+    <form id="search-site" action="/backpacks/search" method="get" class="max-w-2xl">
+      <div class="relative flex items-center">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <i class="fas fa-search text-gray-400"></i>
+        </div>
+        <input id="search" type="search" name="query" placeholder="Search backpacks by name, series, or store..."
+          class="block w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow duration-200" />
+        <button type="submit"
+          class="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-r-xl hover:shadow-lg transition-all duration-200">
+          Search
+        </button>
+      </div>
+    </form>
+  </div>
+  {{/if}}
+
+  <!-- Results Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    {{#each backpacks}}
+    <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+      <div class="relative">
+        <img src="{{bg_image}}" alt="{{bg_name}}"
+          class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        </div>
+      </div>
+
+      <div class="p-6">
+        <div class="flex flex-col mb-4">
+          <h2 class="text-xl font-semibold text-gray-900 line-clamp-2 mb-2">
+            <a href="/backpacks/show/{{_id}}" class="hover:text-primary transition-colors duration-200">{{bg_name}}</a>
+          </h2>
+          <span class="text-lg font-bold text-primary">${{bg_price}}</span>
+        </div>
+
+        <div class="space-y-3 text-sm text-gray-600 mb-6">
+          <p class="flex justify-between items-center">
+            <span class="font-medium">Series:</span>
+            <span class="text-right flex-1 ml-4">{{bg_series}}</span>
+          </p>
+          <p class="flex justify-between items-center">
+            <span class="font-medium">From:</span>
+            <span class="text-right flex-1 ml-4">{{bg_fromSite}}</span>
+          </p>
+          {{#if ../isCollection}}
+          <p class="flex justify-between items-center">
+            <span class="font-medium">Status:</span>
+            <span class="text-right flex-1 ml-4">
+              {{#if owned}}
+                <span class="text-green-600">Owned</span>
+              {{else if wishlist}}
+                <span class="text-blue-600">Wishlist</span>
+              {{/if}}
+            </span>
+          </p>
+          {{/if}}
+          <p class="flex justify-between items-center text-xs text-gray-500">
+            <span class="font-medium">Added:</span>
+            <span>{{formatDate addedToCollection "MMM Do YYYY"}}</span>
+          </p>
+        </div>
+
+        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+          {{#if ../isCollection}}
+          <a href="/backpacks/edit/{{userBackpackId}}"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200">
+            <i class="fas fa-edit mr-2"></i> Edit
+          </a>
+          <form action="/backpacks/{{userBackpackId}}?_method=DELETE" method="POST" class="inline">
+            <button type="submit" onclick="return confirm('Are you sure you want to remove this from your collection?')"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-xl hover:bg-red-100 transition-colors duration-200">
+              <i class="fas fa-trash mr-2"></i> Remove
+            </button>
+          </form>
+          {{else}}
+          <a href="/backpacks/show/{{_id}}"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200">
+            <i class="fas fa-info-circle mr-2"></i> View Details
+          </a>
+          {{#if inCollection}}
+            <button disabled
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-xl cursor-not-allowed">
+              <i class="fas fa-check mr-2"></i> In Collection
+            </button>
+          {{else}}
+            <button type="button"
+              onclick="showModal('{{_id}}', '{{bg_name}}', '{{../searchQuery}}', '{{../pagination.currentPage}}')"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-md transition-all duration-200">
+              <i class="fas fa-plus mr-2"></i> Add to Collection
+            </button>
+          {{/if}}
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    {{else}}
+    <div class="col-span-full">
+      <div class="text-center py-16 bg-white rounded-2xl shadow-sm">
+        <div class="text-gray-400 mb-6">
+          <i class="fas fa-{{#if isCollection}}box-open{{else}}search{{/if}} text-7xl"></i>
+        </div>
+        <h3 class="text-2xl font-medium text-gray-900 mb-3">
+          {{#if isCollection}}
+            Your collection is empty
+          {{else}}
+            No backpacks found
+          {{/if}}
+        </h3>
+        <p class="text-gray-600 mb-8 max-w-md mx-auto">
+          {{#if isCollection}}
+            Start building your collection by searching for backpacks to add!
+          {{else}}
+            Try adjusting your search terms or check back later for new arrivals.
+          {{/if}}
+        </p>
+        {{#if isCollection}}
+          <a href="/backpacks/search"
+            class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-lg transition-all duration-200">
+            <i class="fas fa-search mr-2"></i> Browse Backpacks
+          </a>
+        {{/if}}
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+  {{!-- Pagination Section --}}
+  {{#if pagination}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-4 rounded-xl shadow-sm">
+      {{!-- Results Info --}}
+      <div class="text-sm text-gray-600">
+        Showing <span class="font-medium">{{pagination.showing.start}}</span> to 
+        <span class="font-medium">{{pagination.showing.end}}</span> of 
+        <span class="font-medium">{{pagination.total}}</span> results
+      </div>
+
+      {{!-- Pagination Controls --}}
+      <div class="flex items-center gap-2">
+        {{#if pagination.hasPrevPage}}
+          <a 
+            href="/backpacks/search?query={{searchQuery}}&page={{pagination.prevPage}}" 
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+          >
+            <i class="fas fa-chevron-left mr-2"></i> Previous
+          </a>
+        {{/if}}
+
+        <span class="px-4 py-2 text-sm font-medium text-gray-700">
+          Page {{pagination.currentPage}} of {{pagination.totalPages}}
+        </span>
+
+        {{#if pagination.hasNextPage}}
+          <a 
+            href="/backpacks/search?query={{searchQuery}}&page={{pagination.nextPage}}" 
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+          >
+            Next <i class="fas fa-chevron-right ml-2"></i>
+          </a>
+        {{/if}}
+      </div>
+    </div>
+  {{/if}}
 </div>
