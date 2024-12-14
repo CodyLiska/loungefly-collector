@@ -16,7 +16,7 @@ const newBackpackModel = new mongoose.Schema({
     trim: true,
     maxLength: 100,
   },
-  name: {
+  backpackName: {
     type: String,
     required: true,
     trim: true,
@@ -59,7 +59,7 @@ const newBackpackModel = new mongoose.Schema({
     default: null,
     maxLength: 50,
   },
-  seriesTitle: {
+  seriesCollection: {
     type: String,
     default: null,
     maxLength: 50,
@@ -98,5 +98,15 @@ const newBackpackModel = new mongoose.Schema({
     type: String,
     default: null,
     maxLength: 50,
+  },
+  onlineStore: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  productURL: {
+    type: String,
+    default: null,
+    maxLength: 1000,
   },
 });

@@ -16,7 +16,7 @@ const newUserAddedBackpackModel = new mongoose.Schema({
     default: null,
     enum: ["New", "Like New", "Very Good", "Good", "Acceptable"],
   },
-  purchaseDate: {
+  addedToCollectionDate: {
     type: Date,
     default: null,
     validate: {
@@ -25,6 +25,11 @@ const newUserAddedBackpackModel = new mongoose.Schema({
       },
       message: "Purchase date cannot be in the future",
     },
+  },
+  purchasePrice: {
+    type: Number,
+    default: null,
+    maxLength: 6,
   },
   personalNotes: {
     type: String,

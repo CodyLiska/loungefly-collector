@@ -53,7 +53,7 @@
     {{#each backpacks}}
     <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
       <div class="relative">
-        <img src="{{bg_image}}" alt="{{bg_name}}"
+        <img src="{{image}}" alt="{{backpackName}}"
           class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" />
         <div
           class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -63,19 +63,19 @@
       <div class="p-6">
         <div class="flex flex-col mb-4">
           <h2 class="text-xl font-semibold text-gray-900 line-clamp-2 mb-2">
-            <a href="/backpacks/show/{{_id}}" class="hover:text-primary transition-colors duration-200">{{bg_name}}</a>
+            <a href="/backpacks/show/{{_id}}" class="hover:text-primary transition-colors duration-200">{{backpackName}}</a>
           </h2>
-          <span class="text-lg font-bold text-primary">${{bg_price}}</span>
+          <span class="text-lg font-bold text-primary">${{purchasePrice}}</span>
         </div>
 
         <div class="space-y-3 text-sm text-gray-600 mb-6">
           <p class="flex justify-between items-center">
             <span class="font-medium">Series:</span>
-            <span class="text-right flex-1 ml-4">{{bg_series}}</span>
+            <span class="text-right flex-1 ml-4">{{seriesTitle}}</span>
           </p>
           <p class="flex justify-between items-center">
             <span class="font-medium">From:</span>
-            <span class="text-right flex-1 ml-4">{{bg_fromSite}}</span>
+            <span class="text-right flex-1 ml-4">{{onlineStore}}</span>
           </p>
           {{#if ../isCollection}}
           <p class="flex justify-between items-center">
@@ -119,7 +119,7 @@
             </button>
           {{else}}
             <button type="button"
-              onclick="showModal('{{_id}}', '{{bg_name}}', '{{../searchQuery}}', '{{../pagination.currentPage}}')"
+              onclick="showModal('{{_id}}', '{{backpackName}}', '{{../searchQuery}}', '{{../pagination.currentPage}}')"
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-md transition-all duration-200">
               <i class="fas fa-plus mr-2"></i> Add to Collection
             </button>
