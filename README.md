@@ -2,6 +2,8 @@
 
 *THIS REPO IS USED FOR RENDER HOSTING AND IS MAIN REPO FOR PROJECT*
 
+[<< check it out >>](https://loungefly.onrender.com/)
+
 ### TUTORIALS
 - Tutorial Video - https://www.youtube.com/watch?v=SBvmnHTQIPY
 #### Other Resources
