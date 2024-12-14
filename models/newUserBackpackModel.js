@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const newUserAddedBackpackModel = new mongoose.Schema({
+const NewUserAddedBackpackModel = new mongoose.Schema({
   owned: {
     type: Boolean,
     default: false,
@@ -37,3 +37,13 @@ const newUserAddedBackpackModel = new mongoose.Schema({
     maxLength: 1000,
   },
 });
+
+// Validate that either owned or wishlist is true, but not both
+NewUserAddedBackpackModel.pre('save', function(next) {
+  if (this.owned === this.wishlist) {
+    next(new Error('A backpack must be either in owned or wishlist status, but not both'));
+  }
+  next();
+});
+
+module.exports = mongoose.model("UserBackpack", NewUserAddedBackpackModel);

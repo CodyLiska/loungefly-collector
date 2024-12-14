@@ -2,8 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { ensureAuth, ensureGuest } = require("../middleware/auth");
 
-const UserBackpack = require("../models/UserBackpack");
+// const UserBackpack = require("../models/UserBackpack");
 const User = require("../models/User");
+const Backpack = require("../models/newBackpackModel");
+const UserBackpack = require("../models/newUserBackpackModel");
 
 // @desc    Login/Landing page
 // @route   GET /
@@ -35,18 +37,18 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
       .slice(0, 3)
       .map(ub => ({
         _id: ub._id,
-        bg_name: ub.backpack.bg_name,
-        bg_image: ub.backpack.bg_image,
-        bg_price: ub.purchasePrice || ub.backpack.bg_price,
-        bg_series: ub.backpack.bg_series,
-        owned: ub.owned,
-        wishlist: ub.wishlist,
-        addedAt: ub.addedToCollection
+        backpackName: ub.Backpack.backpackName,
+        image: ub.Backpack.image,
+        purchasePrice: ub.purchasePrice || ub.UserBackpack.purchasePrice,
+        seriesCollection: ub.Backpack.seriesCollection,
+        owned: ub.UserBackpack.owned,
+        wishlist: ub.UserBackpack.wishlist,
+        addedAt: ub.UserBackpack.addedToCollection
       }));
 
     // Group backpacks by series
     const seriesCount = userBackpacks.reduce((acc, ub) => {
-      const series = ub.backpack.bg_series || 'Uncategorized';
+      const series = ub.Backpack.seriesCollection || 'Uncategorized';
       acc[series] = (acc[series] || 0) + 1;
       return acc;
     }, {});

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const newBackpackModel = new mongoose.Schema({
+const NewBackpackModel = new mongoose.Schema({
   heartLogo: {
     type: String,
     default: null,
@@ -50,7 +50,7 @@ const newBackpackModel = new mongoose.Schema({
   },
   // Backpack Sequins: Y/N
   sequins: {
-    type: Char,
+    type: String,
     default: null,
     maxLength: 1,
   },
@@ -65,7 +65,7 @@ const newBackpackModel = new mongoose.Schema({
     maxLength: 50,
   },
   exclusive: {
-    type: Char,
+    type: String,
     default: null,
     maxLength: 1,
   },
@@ -110,3 +110,5 @@ const newBackpackModel = new mongoose.Schema({
     maxLength: 1000,
   },
 });
+
+module.exports = mongoose.model("Backpack", NewBackpackModel);
