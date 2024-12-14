@@ -8,6 +8,7 @@ const methodOverride = require("method-override");
 const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const flash = require("connect-flash");
 const connectDB = require("./config/db");
 
 // load config
@@ -27,16 +28,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // method override middleware
-app.use(
-  methodOverride(function (req, res) {
-    if (req.body && typeof req.body === "object" && "_method" in req.body) {
-      // look in urlencoded POST bodies and delete it
-      let method = req.body._method;
-      delete req.body._method;
-      return method;
-    }
-  })
-);
+app.use(methodOverride(function (req, res) {
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    const method = req.body._method;
+    delete req.body._method;
+    return method;
+  } else if (req.query._method) {
+    // look in query string
+    const method = req.query._method;
+    delete req.query._method;
+    return method;
+  }
+}));
 
 // logging in dev env only
 if (process.env.NODE_ENV === "development") {
@@ -44,13 +48,19 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // handlebars helpers
-const { formatDate, truncate, editIcon } = require("./helpers/hbs");
+const { formatDate, truncate, editIcon, select, eq } = require("./helpers/hbs");
 
 // handlebars
 app.engine(
   ".hbs",
   exphbs.engine({
-    helpers: { formatDate, truncate, editIcon },
+    helpers: {
+      formatDate,
+      truncate,
+      editIcon,
+      select,
+      eq
+    },
     defaultLayout: "main",
     extname: ".hbs",
   })
@@ -66,6 +76,17 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   })
 );
+
+// Flash messages middleware
+app.use(flash());
+
+// Set global variables for flash messages
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 // passport middleware
 app.use(passport.initialize());

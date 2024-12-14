@@ -1,32 +1,109 @@
-<div class="row"></div>
-  <div class="col s12 m8">
-    <h3>{{backpack.bg_name}}
-      {{!-- <small>{{{editIcon backpack.user user backpack.id false}}}</small> --}}
-    </h3>
-    
-      <div class="card-image">
-        <img src="{{backpack.bg_image}}" alt="{{backpack.bg_name}}" />
-      </div>
-      <div class="card-content">
-        <p><strong>PRICE:</strong> ${{backpack.bg_price}}</p>
-        <p><strong>SERIES/COLLECTION:</strong> {{backpack.bg_series}}</p>
-        <p><strong>LINK:</strong> <a href="{{backpack.bg_link}}">View the Bag</a></p>
-        <p><strong>FROM:</strong> {{backpack.bg_fromSite}}</p>
-        <p>{{backpack.createdAt}}</p>
-        <p><strong>DATE ADDED:</strong> {{formatDate date 'MMMM Do YYYY, h:mm:ss a'}}</p>
-      </div>      
-
+{{!-- Backpack Details Page with Modern Design --}}
+<div class="max-w-6xl mx-auto">
+  <div class="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-3xl p-8 mb-8">
+    <h1 class="text-3xl font-bold mb-2">
+      <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        {{backpack.bg_name}}
+      </span>
+    </h1>
+    <p class="text-gray-600">View detailed information about this Loungefly backpack</p>
   </div>
-  {{!-- Below is to display the google account avatar in the show.hbs --}}
-  {{!-- <div class="col s12 m4">
-    <div class="card center-align">
-      <div class="card-content">
-        <span class="card-title">{{backpack.user.displayName}}</span>
-        <img src="{{backpack.user.image}}" class="circle responsive-img img-small">
+
+  <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+    <div class="grid grid-cols-1 md:grid-cols-2">
+      {{!-- Image Section --}}
+      <div class="relative h-full">
+        <img 
+          src="{{backpack.bg_image}}" 
+          alt="{{backpack.bg_name}}" 
+          class="w-full h-full object-cover object-center"
+          style="max-height: 500px;"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
       </div>
-      <div class="card-action">
-        <a href="/backpacks/user/{{backpack.user._id}}">More From {{backpack.user.firstName}}</a>
+
+      {{!-- Details Section --}}
+      <div class="p-8">
+        <div class="space-y-6">
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Price</h2>
+            <p class="text-2xl font-bold text-primary">${{backpack.bg_price}}</p>
+          </div>
+
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Series/Collection</h2>
+            <p class="text-lg text-gray-900">{{backpack.bg_series}}</p>
+          </div>
+
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Store</h2>
+            <p class="text-lg text-gray-900">{{backpack.bg_fromSite}}</p>
+          </div>
+
+          {{#if backpack.bg_inCollection}}
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Status</h2>
+            <p class="text-lg">
+              {{#if backpack.bg_owned}}
+                <span class="text-green-600">Owned</span>
+              {{else if backpack.bg_wishlist}}
+                <span class="text-blue-600">Wishlist</span>
+              {{/if}}
+            </p>
+          </div>
+
+          {{#if backpack.bg_condition}}
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Condition</h2>
+            <p class="text-lg text-gray-900">{{backpack.bg_condition}}</p>
+          </div>
+          {{/if}}
+
+          {{#if backpack.bg_personalNotes}}
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Personal Notes</h2>
+            <p class="text-lg text-gray-900">{{backpack.bg_personalNotes}}</p>
+          </div>
+          {{/if}}
+
+          {{#if backpack.bg_addedToCollection}}
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Added to Collection</h2>
+            <p class="text-lg text-gray-900">{{formatDate backpack.bg_addedToCollection 'MMMM Do YYYY'}}</p>
+            <p class="text-sm text-gray-500">at {{formatDate backpack.bg_addedToCollection 'h:mm a'}}</p>
+          </div>
+          {{/if}}
+          {{/if}}
+
+          {{#if backpack.bg_link}}
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Product Link</h2>
+            <a 
+              href="{{backpack.bg_link}}" 
+              target="_blank"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-md transition-all duration-200"
+            >
+              <i class="fas fa-external-link-alt mr-2"></i> View on {{backpack.bg_fromSite}}
+            </a>
+          </div>
+          {{/if}}
+
+          <div class="flex items-center space-x-4 pt-8 mt-8 border-t border-gray-100">
+            {{#if backpack.bg_inCollection}}
+              <button disabled
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-xl cursor-not-allowed">
+                <i class="fas fa-check mr-2"></i> In Collection
+              </button>
+            {{else}}
+              <button type="button"
+                onclick="showModal('{{backpack._id}}', '{{backpack.bg_name}}', '{{searchQuery}}', '{{page}}')"
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-md transition-all duration-200">
+                <i class="fas fa-plus mr-2"></i> Add to Collection
+              </button>
+            {{/if}}
+          </div>
+        </div>
       </div>
     </div>
-  </div> --}}
+  </div>
 </div>

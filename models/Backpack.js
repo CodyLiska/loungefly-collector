@@ -1,44 +1,36 @@
 const mongoose = require("mongoose");
 
 const BackpackSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
   bg_name: {
     type: String,
-    require: true,
-    trim: true,
+    required: true,
+    trim: true
   },
   bg_image: {
-    data: Buffer,
     type: String,
-    default: null,
+    default: '/img/no-image.jpg'
   },
   bg_price: {
-    type: String,
-    default: null,
-    trim: true,
+    type: Number,
+    required: true,
+    min: 0
   },
   bg_series: {
     type: String,
-    default: null,
-    trim: true,
+    trim: true
   },
   bg_link: {
     type: String,
-    default: null,
-    trim: true,
+    trim: true
   },
   bg_fromSite: {
     type: String,
-    default: null,
-    trim: true,
+    trim: true
   },
   createdAt: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.model("Backpack", BackpackSchema);
