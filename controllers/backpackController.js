@@ -12,18 +12,17 @@ module.exports = {
   addUserCreatedBackpack: async (req, res) => {
     try {
       const { 
-        bg_name, 
-        bg_price, 
+        backpackName, 
+        purchasePrice, 
         status,
         condition,
-        purchasePrice,
         purchaseDate,
-        bg_series,
-        bg_fromSite,
+        seriesCollection,
+        onlineStore,
         personalNotes
       } = req.body;
 
-      if (!bg_name) {
+      if (!backpackName) {
         req.flash('error_msg', 'Backpack name is required. Other fields are optional.');
         return res.redirect('/backpacks/add');
       }
@@ -34,12 +33,12 @@ module.exports = {
       }
 
       // Create new backpack in main collection
-      const backpack = await Backpack.create({
-        bg_name,
-        bg_price,
-        bg_series,
-        bg_fromSite
-      });
+      // const backpack = await Backpack.create({
+      //   name,
+      //   purchasePrice,
+      //   seriesCollection,
+      //   onlineStore
+      // });
 
       // Add to user's collection with additional details
       await UserBackpack.create({
@@ -51,8 +50,8 @@ module.exports = {
         purchasePrice: purchasePrice || null,
         purchaseDate: purchaseDate || null,
         personalNotes,
-        bg_series,
-        bg_fromSite
+        seriesCollection,
+        onlineStore
       });
 
       req.flash('success_msg', 'Backpack successfully added to your collection');
@@ -82,19 +81,22 @@ module.exports = {
         .populate('backpack')
         .lean();
 
+        console.log("req.user: ", req.user)
+        console.log("userBackpacks: ", userBackpacks)
+
       // Transform the data to include both backpack and userBackpack info
       const backpacks = userBackpacks.map(ub => ({
-        _id: ub.backpack._id,
-        userBackpackId: ub._id,
-        bg_name: ub.backpack.bg_name,
-        bg_image: ub.backpack.bg_image,
-        bg_price: ub.purchasePrice || ub.backpack.bg_price,
-        bg_series: ub.bg_series || ub.backpack.bg_series,
-        bg_fromSite: ub.bg_fromSite || ub.backpack.bg_fromSite,
+        _id: ub._id,
+        backpack: ub.backpack,
         owned: ub.owned,
         wishlist: ub.wishlist,
         condition: ub.condition,
-        createdAt: ub.addedToCollection
+        addedToCollectionDate: ub.addedToCollectionDate,
+        purchasePrice: ub.purchasePrice,
+        purchaseDate: ub.purchaseDate,
+
+        name: ub.backpack?.backpackName || "Unknown Backpack",
+        image: ub.backpack?.image || "no image"
       }));
 
       res.render("backpacks/index", {
@@ -133,25 +135,25 @@ module.exports = {
         return res.render("backpacks/show", {
           backpack: {
             _id: backpack._id,
-            bg_name: backpack.bg_name,
-            bg_image: backpack.bg_image,
-            bg_price: backpack.bg_price,
-            bg_series: backpack.bg_series,
-            bg_fromSite: backpack.bg_fromSite,
+            name: backpack.name,
+            image: backpack.image,
+            purchasePrice: backpack.purchasePrice,
+            seriesCollection: backpack.seriesCollection,
+            onlineStore: backpack.onlineStore,
             inCollection
           }
         });
       }
 
-      // Transform UserBackpack data to match template expectations
+      // Transform UserBackpack data to match template expectations  -- THIS IS EVERYWHERE AND MIGHT BE THE DISCONNECT BETWEEN FRT/BK ENDS AND NEW MODELS
       const backpack = {
-        _id: userBackpack.backpack._id,
+        _id: backpack._id,
         userBackpackId: userBackpack._id,
-        bg_name: userBackpack.backpack.bg_name,
-        bg_image: userBackpack.backpack.bg_image,
-        bg_price: userBackpack.purchasePrice || userBackpack.backpack.bg_price,
-        bg_series: userBackpack.bg_series || userBackpack.backpack.bg_series,
-        bg_fromSite: userBackpack.bg_fromSite || userBackpack.backpack.bg_fromSite,
+        name: backpack.backpackName,
+        image: backpack.image,
+        purchasePrice: userBackpack.purchasePrice || null,
+        seriesCollection: userBackpack.seriesCollection || null,
+        onlineStore: userBackpack.onlineStore || null,
         personalNotes: userBackpack.personalNotes,
         condition: userBackpack.condition,
         owned: userBackpack.owned,
@@ -186,14 +188,14 @@ module.exports = {
         res.render("backpacks/edit", { 
           backpack: {
             _id: userBackpack._id,
-            bg_name: userBackpack.backpack.bg_name,
-            bg_image: userBackpack.backpack.bg_image,
-            bg_price: userBackpack.purchasePrice || userBackpack.backpack.bg_price,
-            bg_series: userBackpack.bg_series || userBackpack.backpack.bg_series,
-            bg_fromSite: userBackpack.bg_fromSite || userBackpack.backpack.bg_fromSite,
+            name: userBackpack.backpack.backpackName,
+            image: userBackpack.backpack.image,
+            purchasePrice: userBackpack.purchasePrice || userBackpack.backpack.purchasePrice,
+            seriesCollection: userBackpack.seriesCollection || userBackpack.backpack.seriesCollection,
+            onlineStore: userBackpack.onlineStore || userBackpack.backpack.onlineStore,
             personalNotes: userBackpack.personalNotes || '',
             condition: userBackpack.condition || 'New',
-            purchasePrice: userBackpack.purchasePrice || userBackpack.backpack.bg_price,
+            purchasePrice: userBackpack.purchasePrice || userBackpack.backpack.purchasePrice,
             owned: userBackpack.owned || false,
             wishlist: userBackpack.wishlist || false
           }
@@ -281,9 +283,10 @@ module.exports = {
       // Find backpacks matching the search query
       const searchQuery = {
         $or: [
-          { bg_name: { $regex: query, $options: 'i' } },
-          { bg_series: { $regex: query, $options: 'i' } },
-          { bg_fromSite: { $regex: query, $options: 'i' } }
+          { Name: { $regex: query, $options: 'i' } },
+          { Franchise: { $regex: query, $options: 'i' } },
+          { "Series Title": { $regex: query, $options: 'i' } },
+          { "Other tags": { $regex: query, $options: 'i' } }
         ]
       };
 
@@ -380,7 +383,7 @@ module.exports = {
       });
 
       // Redirect back to search results with success message
-      const message = encodeURIComponent(`${backpack.bg_name} added to your collection!`);
+      const message = encodeURIComponent(`${backpack.name} added to your collection!`);
       res.redirect(`/backpacks/search?query=${searchQuery}&page=${page}&success=${message}`);
     } catch (err) {
       console.error(err);
@@ -432,11 +435,11 @@ module.exports = {
       res.render('backpacks/edit', {
         backpack: {
           _id: userBackpack._id,
-          bg_name: userBackpack.backpack.bg_name,
-          bg_image: userBackpack.backpack.bg_image,
-          bg_price: userBackpack.backpack.bg_price,
-          bg_series: userBackpack.bg_series || userBackpack.backpack.bg_series,
-          bg_fromSite: userBackpack.bg_fromSite || userBackpack.backpack.bg_fromSite,
+          name: userBackpack.backpack.name,
+          image: userBackpack.backpack.image,
+          purchasePrice: userBackpack.backpack.purchasePrice,
+          seriesCollection: userBackpack.seriesCollection || userBackpack.backpack.seriesCollection,
+          onlineStore: userBackpack.onlineStore || userBackpack.backpack.onlineStore,
           purchasePrice: userBackpack.purchasePrice,
           purchaseDate: userBackpack.purchaseDate,
           personalNotes: userBackpack.personalNotes,
@@ -461,8 +464,8 @@ module.exports = {
         condition, 
         purchasePrice, 
         purchaseDate,
-        bg_series, 
-        bg_fromSite, 
+        seriesCollection, 
+        onlineStore, 
         personalNotes 
       } = req.body;
 
@@ -483,8 +486,8 @@ module.exports = {
       userBackpack.condition = status === 'owned' ? condition : null;
       userBackpack.purchasePrice = purchasePrice || null;
       userBackpack.purchaseDate = purchaseDate || null;
-      userBackpack.bg_series = bg_series;
-      userBackpack.bg_fromSite = bg_fromSite;
+      userBackpack.seriesCollection = seriesCollection;
+      userBackpack.onlineStore = onlineStore;
       userBackpack.personalNotes = personalNotes;
 
       await userBackpack.save();

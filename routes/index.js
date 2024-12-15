@@ -4,8 +4,8 @@ const { ensureAuth, ensureGuest } = require("../middleware/auth");
 
 // const UserBackpack = require("../models/UserBackpack");
 const User = require("../models/User");
-const Backpack = require("../models/newBackpackModel");
-const UserBackpack = require("../models/newUserBackpackModel");
+const Backpack = require("../models/Backpack");
+const UserBackpack = require("../models/UserBackpack");
 
 // @desc    Login/Landing page
 // @route   GET /
@@ -31,24 +31,29 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
       wishlist: userBackpacks.filter(bp => bp.wishlist).length,
     };
 
+    console.log("userBackpacks before map, name & img dont work ", userBackpacks);
+
     // Get recently added backpacks (last 3)
     const recentlyAdded = userBackpacks
       .sort((a, b) => b.addedToCollection - a.addedToCollection)
       .slice(0, 3)
       .map(ub => ({
         _id: ub._id,
-        backpackName: ub.Backpack.backpackName,
-        image: ub.Backpack.image,
-        purchasePrice: ub.purchasePrice || ub.UserBackpack.purchasePrice,
-        seriesCollection: ub.Backpack.seriesCollection,
-        owned: ub.UserBackpack.owned,
-        wishlist: ub.UserBackpack.wishlist,
-        addedAt: ub.UserBackpack.addedToCollection
+        //image: ub.backpack?.image,
+        user: ub._id,
+        //backpack: ub.backpack?.backpackName,
+        backpack: ub.backpackName,
+        owned: ub.owned,
+        wishlist: ub.wishlist,
+        condition: ub.condition,
+        addedToCollectionDate: ub.addedToCollectionDate,
+        purchasePrice: ub.purchasePrice,
+        personalNotes: ub.personalNotes,
       }));
 
     // Group backpacks by series
     const seriesCount = userBackpacks.reduce((acc, ub) => {
-      const series = ub.Backpack.seriesCollection || 'Uncategorized';
+      const series = ub.seriesCollection || 'Uncategorized';
       acc[series] = (acc[series] || 0) + 1;
       return acc;
     }, {});
