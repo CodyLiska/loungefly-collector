@@ -1,0 +1,15 @@
+meta {
+  name: GET -one-
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:1000/my-collection/showcollection?collection=harry potter
+  body: none
+  auth: none
+}
+
+params:query {
+  collection: harry potter
+}

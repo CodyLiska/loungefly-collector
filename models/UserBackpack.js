@@ -9,7 +9,7 @@ const NewUserAddedBackpackSchema = new mongoose.Schema({
   backpack: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Backpack",
-    required: true,
+    //required: true,
   },
   owned: {
     type: Boolean,

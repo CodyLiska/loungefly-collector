@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "LoungeFly Collector App",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

@@ -12,14 +12,15 @@ module.exports = {
   addUserCreatedBackpack: async (req, res) => {
     try {
       const { 
-        backpackName, 
-        purchasePrice, 
+        backpackName,
+        heartLogo, 
         status,
         condition,
-        purchaseDate,
         seriesCollection,
         onlineStore,
-        personalNotes
+        purchasePrice,
+        addedToCollectionDate,
+        personalNotes,
       } = req.body;
 
       if (!backpackName) {
@@ -32,26 +33,32 @@ module.exports = {
         return res.redirect('/backpacks/add');
       }
 
-      // Create new backpack in main collection
-      // const backpack = await Backpack.create({
-      //   name,
-      //   purchasePrice,
-      //   seriesCollection,
-      //   onlineStore
-      // });
+      const backpack = await Backpack.create({
+        backpackName,
+        heartLogo,
+        seriesCollection,
+        onlineStore,
+        purchasePrice,
+        addedToCollectionDate,
+        personalNotes,
+      });
 
+      console.log("req.user: ", req.user);
+      console.log("req.body: ", req.body);
+      
       // Add to user's collection with additional details
       await UserBackpack.create({
         backpack: backpack._id,
         user: req.user.id,
+        heartLogo,
         owned: status === 'owned',
         wishlist: status === 'wishlist',
         condition: status === 'owned' ? condition : null,
-        purchasePrice: purchasePrice || null,
-        purchaseDate: purchaseDate || null,
-        personalNotes,
         seriesCollection,
-        onlineStore
+        onlineStore,
+        purchasePrice: purchasePrice || null,
+        addedToCollectionDate: addedToCollectionDate || null,
+        personalNotes,
       });
 
       req.flash('success_msg', 'Backpack successfully added to your collection');
@@ -93,10 +100,10 @@ module.exports = {
         condition: ub.condition,
         addedToCollectionDate: ub.addedToCollectionDate,
         purchasePrice: ub.purchasePrice,
-        purchaseDate: ub.purchaseDate,
+        personalNotes: ub.personalNotes,
 
-        name: ub.backpack?.backpackName || "Unknown Backpack",
-        image: ub.backpack?.image || "no image"
+        // name: ub.backpack?.backpackName || "Unknown Backpack",
+        // image: ub.backpack?.image || "no image"
       }));
 
       res.render("backpacks/index", {
@@ -283,10 +290,10 @@ module.exports = {
       // Find backpacks matching the search query
       const searchQuery = {
         $or: [
-          { Name: { $regex: query, $options: 'i' } },
-          { Franchise: { $regex: query, $options: 'i' } },
-          { "Series Title": { $regex: query, $options: 'i' } },
-          { "Other tags": { $regex: query, $options: 'i' } }
+          { backpackName: { $regex: query, $options: 'i' } },
+          { franchise: { $regex: query, $options: 'i' } },
+          { seriesCollection: { $regex: query, $options: 'i' } },
+          { otherTags: { $regex: query, $options: 'i' } }
         ]
       };
 

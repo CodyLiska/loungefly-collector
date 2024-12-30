@@ -57,3 +57,5 @@
   - ### PROBLEM
     - when using backpack_new collection; Your Collection shows backpack cards and Status & Added data but nothing else. Seems to be a disconnect between frontend and backend
     - frontend doesn't match what backend is expecting for the backpack base properties
+
+- UPDATE ALL FORMS TO HAVE ALL PROPERTIES OF BOTH BACKPACK MODELS

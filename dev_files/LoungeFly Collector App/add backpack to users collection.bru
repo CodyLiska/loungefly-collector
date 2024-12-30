@@ -1,0 +1,22 @@
+meta {
+  name: add backpack to users collection
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:1000/my-collection/addbackpack
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "bg_name": "nala_users_collection backpack 1",
+    "bg_image": null,
+    "bg_price": "$999.99",
+    "bg_series": "Lord of the Rings",
+    "bg_link": "https://google.com",
+    "bg_fromSite": "Loungefly"
+  }
+}

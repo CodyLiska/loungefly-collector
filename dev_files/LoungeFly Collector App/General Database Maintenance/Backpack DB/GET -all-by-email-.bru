@@ -1,0 +1,15 @@
+meta {
+  name: GET -all-by-email-
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:1000/my-collection/showcollection?email=codyliska@yahoo.com
+  body: none
+  auth: none
+}
+
+params:query {
+  email: codyliska@yahoo.com
+}

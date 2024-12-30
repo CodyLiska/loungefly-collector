@@ -1,0 +1,15 @@
+meta {
+  name: find backpack by name MainDB
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:1000/my-collection/search?bg_name=jack
+  body: none
+  auth: none
+}
+
+params:query {
+  bg_name: jack
+}

@@ -21,7 +21,7 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
   try {
     // Get all user's backpacks
     const userBackpacks = await UserBackpack.find({ user: req.user.id })
-      .populate('backpack')
+      .populate('backpack')  
       .lean();
 
     // Calculate statistics
@@ -39,10 +39,10 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
       .slice(0, 3)
       .map(ub => ({
         _id: ub._id,
-        //image: ub.backpack?.image,
-        user: ub._id,
+        //image: ub.Image,
+        //user: ub._id,
         //backpack: ub.backpack?.backpackName,
-        backpack: ub.backpackName,
+        backpack: ub.backpack,
         owned: ub.owned,
         wishlist: ub.wishlist,
         condition: ub.condition,
