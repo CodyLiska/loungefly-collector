@@ -65,17 +65,13 @@
           <h2 class="text-xl font-semibold text-gray-900 line-clamp-2 mb-2">
             <a href="/backpacks/show/{{_id}}" class="hover:text-primary transition-colors duration-200">{{backpackName}}</a>
           </h2>
-          <span class="text-lg font-bold text-primary">${{purchasePrice}}</span>
+          {{!-- <span class="text-lg font-bold text-primary">${{purchasePrice}}</span> --}}
         </div>
 
         <div class="space-y-3 text-sm text-gray-600 mb-6">
           <p class="flex justify-between items-center">
             <span class="font-medium">Series:</span>
-            <span class="text-right flex-1 ml-4">{{seriesTitle}}</span>
-          </p>
-          <p class="flex justify-between items-center">
-            <span class="font-medium">From:</span>
-            <span class="text-right flex-1 ml-4">{{onlineStore}}</span>
+            <span class="text-right flex-1 ml-4">{{franchise}}</span>
           </p>
           {{#if ../isCollection}}
           <p class="flex justify-between items-center">
@@ -89,10 +85,6 @@
             </span>
           </p>
           {{/if}}
-          <p class="flex justify-between items-center text-xs text-gray-500">
-            <span class="font-medium">Added:</span>
-            <span>{{formatDate addedToCollection "MMM Do YYYY"}}</span>
-          </p>
         </div>
 
         <div class="flex items-center justify-between pt-4 border-t border-gray-100">

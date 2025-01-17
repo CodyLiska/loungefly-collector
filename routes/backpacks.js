@@ -25,9 +25,7 @@ router.post("/addToUserCollection", ensureAuth, addUserCreatedBackpack);
 // @route   GET /backpacks
 router.get("/", ensureAuth, getUsersCollectionPage);
 
-// @desc    Show a single backpack by id
-// @route   GET /backpacks/show/:id
-router.get("/show/:id", ensureAuth, getSingleBackpackById);
+
 
 // @desc    Edit a backpack by id
 // @route   GET /backpacks/edit/:id
@@ -40,12 +38,28 @@ router.route("/:id")
   .put(ensureAuth, updateBackpack)
   .delete(ensureAuth, deleteBackpack);
 
-// @desc    Show the search page
-// @route   GET /backpacks/search
-router.get("/search", ensureAuth, getSearchPage);
 
 // @desc    Add a backpack to users collection
 // @route   POST /backpacks/:id/add
 router.post("/:id/add", ensureAuth, addBackpackFromDatabase);
+////
+////
+////
+
+
+
+
+
+
+
+// Below are working**
+
+// @desc    Show the search page
+// @route   GET /backpacks/search
+router.get("/search", ensureAuth, getSearchPage);
+
+// @desc    Show a single backpack by id
+// @route   GET /backpacks/show/:id
+router.get("/show/:id", ensureAuth, getSingleBackpackById);
 
 module.exports = router;

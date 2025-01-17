@@ -1,10 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { ensureAuth, ensureGuest } = require("../middleware/auth");
-
-// const UserBackpack = require("../models/UserBackpack");
-const User = require("../models/User");
-const Backpack = require("../models/Backpack");
 const UserBackpack = require("../models/UserBackpack");
 
 // @desc    Login/Landing page
@@ -31,44 +27,34 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
       wishlist: userBackpacks.filter(bp => bp.wishlist).length,
     };
 
-    console.log("userBackpacks before map, name & img dont work ", userBackpacks);
-
     // Get recently added backpacks (last 3)
     const recentlyAdded = userBackpacks
       .sort((a, b) => b.addedToCollection - a.addedToCollection)
       .slice(0, 3)
       .map(ub => ({
         _id: ub._id,
-        //image: ub.Image,
-        //user: ub._id,
-        //backpack: ub.backpack?.backpackName,
-        backpack: ub.backpack,
-        owned: ub.owned,
-        wishlist: ub.wishlist,
-        condition: ub.condition,
-        addedToCollectionDate: ub.addedToCollectionDate,
-        purchasePrice: ub.purchasePrice,
-        personalNotes: ub.personalNotes,
+        image: ub.backpack.Image,
+        backpackName: ub.backpack.Name,
       }));
 
-    // Group backpacks by series
-    const seriesCount = userBackpacks.reduce((acc, ub) => {
-      const series = ub.seriesCollection || 'Uncategorized';
-      acc[series] = (acc[series] || 0) + 1;
+    // Group backpacks by franchise
+    const franchiseCount = userBackpacks.reduce((acc, ub) => {
+      const franchises = ub.backpack.Franchise || 'Uncategorized';
+      acc[franchises] = (acc[franchises] || 0) + 1;
       return acc;
     }, {});
 
-    // Sort series by count and get top 5
-    const topSeries = Object.entries(seriesCount)
+    // Sort franchises by count and get top 5
+    const topFranchises = Object.entries(franchiseCount)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
-      .map(([series, count]) => ({ series, count }));
+      .map(([franchises, franchiseCount]) => ({ franchises, franchiseCount }));
 
     res.render("dashboard", {
       name: req.user.displayName,
       stats,
       recentlyAdded,
-      topSeries,
+      topFranchises,
       hasBackpacks: userBackpacks.length > 0
     });
   } catch (err) {

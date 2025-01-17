@@ -3,10 +3,10 @@
   <div class="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-3xl p-8 mb-8">
     <h1 class="text-3xl font-bold mb-2">
       <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-        {{backpackName}}
+        {{backpack.backpackName}}
       </span>
     </h1>
-    <p class="text-gray-600">View detailed information about this Loungefly backpack</p>
+    {{!-- <p class="text-gray-600">View detailed information about this Loungefly backpack</p> --}}
   </div>
 
   <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -14,8 +14,8 @@
       {{!-- Backpack Image Section --}}
       <div class="relative h-full">
         <img 
-          src="{{image}}" 
-          alt="{{backpackName}}" 
+          src="{{backpack.image}}" 
+          alt="{{backpack.backpackName}}" 
           class="w-full h-full object-cover object-center"
           style="max-height: 500px;"
         />
@@ -32,7 +32,7 @@
 
           <div>
             <h2 class="text-sm font-medium text-gray-500 mb-1">Series/Collection</h2>
-            <p class="text-lg text-gray-900">{{seriesCollection}}</p>
+            <p class="text-lg text-gray-900">{{backpack.franchise}}</p>
           </div>
 
           <div>

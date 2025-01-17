@@ -11,9 +11,9 @@ module.exports = {
   // add user created backpack to the database
   addUserCreatedBackpack: async (req, res) => {
     try {
-      const { 
+      const {
         backpackName,
-        heartLogo, 
+        heartLogo,
         status,
         condition,
         seriesCollection,
@@ -45,7 +45,7 @@ module.exports = {
 
       console.log("req.user: ", req.user);
       console.log("req.body: ", req.body);
-      
+
       // Add to user's collection with additional details
       await UserBackpack.create({
         backpack: backpack._id,
@@ -88,22 +88,18 @@ module.exports = {
         .populate('backpack')
         .lean();
 
-        console.log("req.user: ", req.user)
-        console.log("userBackpacks: ", userBackpacks)
+      // console.log("req.user: ", req.user)
+      // console.log("userBackpacks: ", userBackpacks)
 
       // Transform the data to include both backpack and userBackpack info
       const backpacks = userBackpacks.map(ub => ({
         _id: ub._id,
-        backpack: ub.backpack,
         owned: ub.owned,
         wishlist: ub.wishlist,
         condition: ub.condition,
         addedToCollectionDate: ub.addedToCollectionDate,
         purchasePrice: ub.purchasePrice,
         personalNotes: ub.personalNotes,
-
-        // name: ub.backpack?.backpackName || "Unknown Backpack",
-        // image: ub.backpack?.image || "no image"
       }));
 
       res.render("backpacks/index", {
@@ -119,61 +115,36 @@ module.exports = {
 
   // get and display a single backpack
   getSingleBackpackById: async (req, res) => {
-    try {
-      // First try to find it in user's collection
-      let userBackpack = await UserBackpack.findOne({
-        backpack: req.params.id,
-        user: req.user.id
-      }).populate('backpack').lean();
+      const backpack = await Backpack.findById(req.params.id).lean();
 
-      // If not in collection, get the base backpack
-      if (!userBackpack) {
-        const backpack = await Backpack.findById(req.params.id).lean();
-        if (!backpack) {
-          return res.render("error/404");
-        }
+      console.log("singleBackpack: ", backpack);
 
-        // Check if this backpack is in user's collection
-        const inCollection = await UserBackpack.exists({
-          backpack: backpack._id,
-          user: req.user.id
-        });
-
-        return res.render("backpacks/show", {
-          backpack: {
-            _id: backpack._id,
-            name: backpack.name,
-            image: backpack.image,
-            purchasePrice: backpack.purchasePrice,
-            seriesCollection: backpack.seriesCollection,
-            onlineStore: backpack.onlineStore,
-            inCollection
-          }
-        });
-      }
-
-      // Transform UserBackpack data to match template expectations  -- THIS IS EVERYWHERE AND MIGHT BE THE DISCONNECT BETWEEN FRT/BK ENDS AND NEW MODELS
-      const backpack = {
+      const singleBackpackForShow = {
         _id: backpack._id,
-        userBackpackId: userBackpack._id,
-        name: backpack.backpackName,
-        image: backpack.image,
-        purchasePrice: userBackpack.purchasePrice || null,
-        seriesCollection: userBackpack.seriesCollection || null,
-        onlineStore: userBackpack.onlineStore || null,
-        personalNotes: userBackpack.personalNotes,
-        condition: userBackpack.condition,
-        owned: userBackpack.owned,
-        wishlist: userBackpack.wishlist,
-        addedToCollection: userBackpack.addedToCollection,
-        inCollection: true
+        heartLogo: backpack.heartLogo,
+        image: backpack.Image, // Map to camelCase
+        backpackName: backpack.Name, // Map to camelCase
+        size: backpack.Size,
+        franchise: backpack.Franchise,
+        hardTagSoftTag: backpack.Hard_Tag_Soft_Tag,
+        dateReleased: backpack.Date_Released,
+        bagStyle: backpack.Bag_Style,
+        patternType: backpack.Pattern_Type,
+        sequins: backpack.Sequins,
+        serieTitle: backpack.Serie_Title,
+        exclusive: backpack.Exclusive,
+        loungeflyTag: backpack.Loungefly_Tag,
+        shopIfExclusive: backpack.Shop_If_Exclusive,
+        // inCollection: userBackpacks.some(ub =>
+        //   ub.backpack.toString() === backpack._id.toString()
+        // )
       };
 
-      res.render("backpacks/show", { backpack });
-    } catch (err) {
-      console.error("Error getting backpack:", err);
-      res.render("error/404");
-    }
+      console.log("singleBackpackForShow: ", singleBackpackForShow);
+
+      res.render("backpacks/show", {
+        backpack: singleBackpackForShow,
+      });
   },
 
   // edit backpack
@@ -192,7 +163,7 @@ module.exports = {
       if (userBackpack.user.toString() !== req.user.id) {
         res.redirect("/backpacks");
       } else {
-        res.render("backpacks/edit", { 
+        res.render("backpacks/edit", {
           backpack: {
             _id: userBackpack._id,
             name: userBackpack.backpack.backpackName,
@@ -278,9 +249,12 @@ module.exports = {
       const limit = 10;
       const skip = (page - 1) * limit;
 
+      // Add debug logging
+      // console.log('Search query:', query);
+
       // If no query, show empty search page
       if (!query || query.trim() === '') {
-        return res.render("backpacks/index", { 
+        return res.render("backpacks/index", {
           backpacks: [],
           isSearchResult: true,
           searchQuery: ''
@@ -290,16 +264,25 @@ module.exports = {
       // Find backpacks matching the search query
       const searchQuery = {
         $or: [
-          { backpackName: { $regex: query, $options: 'i' } },
-          { franchise: { $regex: query, $options: 'i' } },
-          { seriesCollection: { $regex: query, $options: 'i' } },
-          { otherTags: { $regex: query, $options: 'i' } }
+          { Name: { $regex: query, $options: 'i' } },  // Changed from 'name' to 'Name'
+          { Franchise: { $regex: query, $options: 'i' } },
+          { SeriesCollection: { $regex: query, $options: 'i' } },
+          { OtherTags: { $regex: query, $options: 'i' } }
         ]
       };
 
+      // Add debug logging
+      // console.log('MongoDB query:', JSON.stringify(searchQuery));
+
       // Get total count for pagination
       const total = await Backpack.countDocuments(searchQuery);
+
+      // Calculate total pages
       const totalPages = Math.ceil(total / limit);
+
+      // Add debug logging
+      // console.log('Total results found:', total);
+      // console.log('Total pages:', totalPages);
 
       // Get paginated results
       const backpacks = await Backpack.find(searchQuery)
@@ -307,9 +290,11 @@ module.exports = {
         .limit(limit)
         .lean();
 
+      // console.log("backpacks: ", backpacks);
+
       // If no results found
       if (!backpacks || backpacks.length === 0) {
-        return res.render("backpacks/index", { 
+        return res.render("backpacks/index", {
           backpacks: [],
           isSearchResult: true,
           searchQuery: query
@@ -321,18 +306,36 @@ module.exports = {
         user: req.user.id
       }).lean();
 
-      // Add inCollection flag to each backpack
+      console.log("userBackpacks: ", userBackpacks);
+
+      // Backpack Search Response Mapper with In-Collection Status
       const backpacksWithCollectionStatus = backpacks.map(backpack => ({
-        ...backpack,
-        inCollection: userBackpacks.some(ub => 
+        _id: backpack._id,
+        heartLogo: backpack.heartLogo,
+        image: backpack.Image, // Map to camelCase
+        backpackName: backpack.Name, // Map to camelCase
+        size: backpack.Size,
+        franchise: backpack.Franchise,
+        hardTagSoftTag: backpack.Hard_Tag_Soft_Tag,
+        dateReleased: backpack.Date_Released,
+        bagStyle: backpack.Bag_Style,
+        patternType: backpack.Pattern_Type,
+        sequins: backpack.Sequins,
+        serieTitle: backpack.Serie_Title,
+        exclusive: backpack.Exclusive,
+        loungeflyTag: backpack.Loungefly_Tag,
+        shopIfExclusive: backpack.Shop_If_Exclusive,
+        inCollection: userBackpacks.some(ub =>
           ub.backpack.toString() === backpack._id.toString()
         )
       }));
 
+      // console.log("backpacksWithCollectionStatus: " + JSON.stringify(backpacksWithCollectionStatus, null, 2));
+
       // Prepare pagination data
       const pagination = {
         currentPage: page,
-        totalPages,
+        totalPages,  // Now totalPages is defined
         hasNextPage: page < totalPages,
         hasPrevPage: page > 1,
         nextPage: page + 1,
@@ -344,7 +347,7 @@ module.exports = {
         }
       };
 
-      res.render("backpacks/index", { 
+      res.render("backpacks/index", {
         backpacks: backpacksWithCollectionStatus,
         isSearchResult: true,
         searchQuery: query,
@@ -379,7 +382,7 @@ module.exports = {
 
       // Get backpack details for the success message
       const backpack = await Backpack.findById(backpackId).lean();
-      
+
       // Create new UserBackpack entry
       await UserBackpack.create({
         user: userId,
@@ -466,14 +469,14 @@ module.exports = {
     try {
       const userBackpackId = req.params.id;
       const userId = req.user.id;
-      const { 
-        status, 
-        condition, 
-        purchasePrice, 
+      const {
+        status,
+        condition,
+        purchasePrice,
         purchaseDate,
-        seriesCollection, 
-        onlineStore, 
-        personalNotes 
+        seriesCollection,
+        onlineStore,
+        personalNotes
       } = req.body;
 
       // Find the user's backpack

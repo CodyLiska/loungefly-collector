@@ -46,7 +46,6 @@
             <img src="{{image}}" alt="{{backpackName}}" class="w-16 h-16 object-cover rounded-lg">
             <div class="flex-1 min-w-0">
               <p class="text-sm font-medium text-gray-900 truncate">{{backpackName}}</p>
-              <p class="text-sm text-gray-500">{{seriesCollection}}</p>
               <p class="text-xs text-gray-400">Added {{formatDate addedAt "MMM Do YYYY"}}</p>
             </div>
             <div class="flex-shrink-0">
@@ -69,11 +68,11 @@
     <div class="bg-white p-6 rounded-2xl shadow-sm">
       <h2 class="text-xl font-bold text-gray-900 mb-6">Top Series</h2>
       <div class="space-y-4">
-        {{#each topSeries}}
+        {{#each topFranchises}}
           <div class="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50">
-            <span class="text-sm font-medium text-gray-900">{{seriesCollection}}</span>
+            <span class="text-sm font-medium text-gray-900">{{franchises}}</span>
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-              {{count}} backpack{{#unless (eq count 1)}}s{{/unless}}
+              {{franchiseCount}} backpack{{#unless (eq franchiseCount 1)}}s{{/unless}}
             </span>
           </div>
         {{/each}}
