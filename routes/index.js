@@ -1,10 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { ensureAuth, ensureGuest } = require("../middleware/auth");
-
-// const UserBackpack = require("../models/UserBackpack");
-const User = require("../models/User");
-const Backpack = require("../models/Backpack");
 const UserBackpack = require("../models/UserBackpack");
 
 // @desc    Login/Landing page
@@ -31,8 +27,6 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
       wishlist: userBackpacks.filter(bp => bp.wishlist).length,
     };
 
-    console.log("userBackpacks before map, name & img dont work ", userBackpacks);
-
     // Get recently added backpacks (last 3)
     const recentlyAdded = userBackpacks
       .sort((a, b) => b.addedToCollectionDate - a.addedToCollectionDate)
@@ -54,17 +48,17 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
       return acc;
     }, {});
 
-    // Sort series by count and get top 5
-    const topSeries = Object.entries(seriesCount)
+    // Sort franchises by count and get top 5
+    const topFranchises = Object.entries(franchiseCount)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
-      .map(([series, count]) => ({ series, count }));
+      .map(([franchises, franchiseCount]) => ({ franchises, franchiseCount }));
 
     res.render("dashboard", {
       name: req.user.displayName,
       stats,
       recentlyAdded,
-      topSeries,
+      topFranchises,
       hasBackpacks: userBackpacks.length > 0
     });
   } catch (err) {
