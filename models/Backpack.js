@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const NewBackpackSchema = new mongoose.Schema({
+const BapackSchema = new mongoose.Schema({
   heartLogo: {
     type: String,
     default: null,
@@ -18,7 +18,7 @@ const NewBackpackSchema = new mongoose.Schema({
   },
   backpackName: {
     type: String,
-    required: true,
+    //required: true,
     trim: true,
     maxLength: 100,
   },
@@ -111,4 +111,4 @@ const NewBackpackSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Backpack", NewBackpackSchema);
+module.exports = mongoose.model("Backpack", BapackSchema);

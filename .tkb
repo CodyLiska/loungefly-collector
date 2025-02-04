@@ -1,0 +1,61 @@
+{
+  "scope": "Workspace",
+  "tasks": {
+    "25zZvTAHkwD87NcF7g4dn": {
+      "id": "25zZvTAHkwD87NcF7g4dn",
+      "description": "RECENTLY ADDED section:\n- backpack images not showing\n- backpack name not showing",
+      "columnId": "column-todo"
+    },
+    "eMo8Z3CiZlrKwigKOUnWS": {
+      "id": "eMo8Z3CiZlrKwigKOUnWS",
+      "description": "TOP SERIES section:\n- series name not displaying",
+      "columnId": "column-todo"
+    },
+    "XJm73ZyqaclOcAiME3_n1": {
+      "id": "XJm73ZyqaclOcAiME3_n1",
+      "description": "Backpack Data Missing:\n- image\n- price\n- name\n- series\n- from",
+      "columnId": "column-doing"
+    },
+    "VeXunw7QfDnPmpANZ9V5x": {
+      "id": "VeXunw7QfDnPmpANZ9V5x",
+      "description": "Page doesn't load results, throws error",
+      "columnId": "column-done"
+    },
+    "hvADQIDDElHXd7RynbEW6": {
+      "id": "hvADQIDDElHXd7RynbEW6",
+      "description": "Add to collection button not working",
+      "columnId": "column-jZKrRmkEfouEa1Y16WSoZ"
+    }
+  },
+  "columns": [
+    {
+      "id": "column-todo",
+      "title": "/dashboard",
+      "tasksIds": [
+        "25zZvTAHkwD87NcF7g4dn",
+        "eMo8Z3CiZlrKwigKOUnWS"
+      ]
+    },
+    {
+      "id": "column-doing",
+      "title": "/backpacks",
+      "tasksIds": [
+        "XJm73ZyqaclOcAiME3_n1"
+      ]
+    },
+    {
+      "id": "column-done",
+      "title": "/backpacks/search",
+      "tasksIds": [
+        "VeXunw7QfDnPmpANZ9V5x"
+      ]
+    },
+    {
+      "id": "column-jZKrRmkEfouEa1Y16WSoZ",
+      "title": "/backpacks/search",
+      "tasksIds": [
+        "hvADQIDDElHXd7RynbEW6"
+      ]
+    }
+  ]
+}

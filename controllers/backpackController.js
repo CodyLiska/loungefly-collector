@@ -321,11 +321,18 @@ module.exports = {
         user: req.user.id
       }).lean();
 
+      console.log("backpacks", backpacks);
+
       // Add inCollection flag to each backpack
-      const backpacksWithCollectionStatus = backpacks.map(backpack => ({
-        ...backpack,
+      const backpacksWithCollectionStatus = backpacks.map(bp => ({
+        image: bp.image,
+        backpackName: bp.backpackName,
+        purchasePrice: bp.purchasePrice,
+        seriesCollection: bp.seriesCollection,
+        onlineStore: bp.shopsIfExclusive,
+        purchaseDate: bp.purchaseDate,
         inCollection: userBackpacks.some(ub => 
-          ub.backpack.toString() === backpack._id.toString()
+          ub.backpack.toString() === bp._id.toString()
         )
       }));
 
@@ -390,7 +397,7 @@ module.exports = {
       });
 
       // Redirect back to search results with success message
-      const message = encodeURIComponent(`${backpack.name} added to your collection!`);
+      const message = encodeURIComponent(`${backpack.backpackName} added to your collection!`);
       res.redirect(`/backpacks/search?query=${searchQuery}&page=${page}&success=${message}`);
     } catch (err) {
       console.error(err);

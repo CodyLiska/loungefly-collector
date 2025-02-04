@@ -35,21 +35,17 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
 
     // Get recently added backpacks (last 3)
     const recentlyAdded = userBackpacks
-      .sort((a, b) => b.addedToCollection - a.addedToCollection)
+      .sort((a, b) => b.addedToCollectionDate - a.addedToCollectionDate)
       .slice(0, 3)
       .map(ub => ({
-        _id: ub._id,
-        //image: ub.Image,
-        //user: ub._id,
-        //backpack: ub.backpack?.backpackName,
-        backpack: ub.backpack,
+        image: ub.backpack?.image,
+        backpackName: ub.backpack?.backpackName,
         owned: ub.owned,
         wishlist: ub.wishlist,
-        condition: ub.condition,
         addedToCollectionDate: ub.addedToCollectionDate,
-        purchasePrice: ub.purchasePrice,
-        personalNotes: ub.personalNotes,
       }));
+
+      console.log("recentlyAdded", recentlyAdded); 
 
     // Group backpacks by series
     const seriesCount = userBackpacks.reduce((acc, ub) => {
