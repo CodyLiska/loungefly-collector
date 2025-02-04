@@ -68,11 +68,11 @@
     <div class="bg-white p-6 rounded-2xl shadow-sm">
       <h2 class="text-xl font-bold text-gray-900 mb-6">Top Series</h2>
       <div class="space-y-4">
-        {{#each topFranchises}}
+        {{#each topSeries}}
           <div class="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50">
             <span class="text-sm font-medium text-gray-900">{{franchises}}</span>
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-              {{franchiseCount}} backpack{{#unless (eq franchiseCount 1)}}s{{/unless}}
+              {{seriesCount}} backpack{{#unless (eq seriesCount 1)}}s{{/unless}}
             </span>
           </div>
         {{/each}}

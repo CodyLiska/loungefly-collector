@@ -49,16 +49,16 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
     }, {});
 
     // Sort franchises by count and get top 5
-    const topFranchises = Object.entries(franchiseCount)
+    const topSeries = Object.entries(seriesCount)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
-      .map(([franchises, franchiseCount]) => ({ franchises, franchiseCount }));
+      .map(([series, seriesCount]) => ({ series, seriesCount }));
 
     res.render("dashboard", {
       name: req.user.displayName,
       stats,
       recentlyAdded,
-      topFranchises,
+      topSeries,
       hasBackpacks: userBackpacks.length > 0
     });
   } catch (err) {

@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Backpack = require('./Backpack');
 
 const UserBackpackSchema = new mongoose.Schema({
-const UserBackpackSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -67,7 +66,6 @@ const UserBackpackSchema = new mongoose.Schema({
 });
 
 // Validate that either owned or wishlist is true, but not both
-UserBackpackSchema.pre("save", function (next) {
 UserBackpackSchema.pre("save", function (next) {
   if (this.owned === this.wishlist) {
     next(
