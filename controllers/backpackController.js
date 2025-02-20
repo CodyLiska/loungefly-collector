@@ -93,16 +93,13 @@ module.exports = {
 
       // Transform the data to include both backpack and userBackpack info
       const backpacks = userBackpacks.map(ub => ({
-        _id: ub._id,
-        owned: ub.owned,
-        wishlist: ub.wishlist,
-        condition: ub.condition,
-        addedToCollectionDate: ub.addedToCollectionDate,
-        purchasePrice: ub.purchasePrice,
-        personalNotes: ub.personalNotes,
+        image: ub.backpack?.image,
+        backpackName: ub.backpackName,
+        seriesCollection: ub.seriesCollection,
+        shopsIfExclusive: ub.shopIfExclusive,
       }));
 
-      res.render("backpacks/index", {
+      res.render("backpacks/collection", {
         backpacks,
         isCollection: true,
         currentFilter: filter
@@ -113,32 +110,37 @@ module.exports = {
     }
   },
 
-  // get and display a single backpack
+  // get and display a single backpack (or this is a mapper to backpack base model)
   getSingleBackpackById: async (req, res) => {
       const backpack = await Backpack.findById(req.params.id).lean();
 
       console.log("singleBackpack: ", backpack);
 
-      const singleBackpackForShow = {
-        _id: backpack._id,
-        heartLogo: backpack.heartLogo,
-        image: backpack.Image, // Map to camelCase
-        backpackName: backpack.Name, // Map to camelCase
-        size: backpack.Size,
-        franchise: backpack.Franchise,
-        hardTagSoftTag: backpack.Hard_Tag_Soft_Tag,
-        dateReleased: backpack.Date_Released,
-        bagStyle: backpack.Bag_Style,
-        patternType: backpack.Pattern_Type,
-        sequins: backpack.Sequins,
-        serieTitle: backpack.Serie_Title,
-        exclusive: backpack.Exclusive,
-        loungeflyTag: backpack.Loungefly_Tag,
-        shopIfExclusive: backpack.Shop_If_Exclusive,
-        // inCollection: userBackpacks.some(ub =>
-        //   ub.backpack.toString() === backpack._id.toString()
-        // )
-      };
+      const singleBackpackForShow = backpack.map(bp => ({
+        _id: bp.backpack._id,
+        heartLogo: bp.backpack.heartLogo,
+        image: bp.backpack.image,
+        backpackName: bp.backpack.name,
+        size: bp.backpack.size,
+        hardTagSoftTag: bp.backpack.hardTagSoftTag,
+        dateReleased: bp.backpack.dateReleased,
+        bagStyle: bp.backpack.bagStyle,
+        patternType: bp.backpack.patternType,
+        sequins: bp.backpack.sequins,
+        franchise: bp.backpack.franchise,
+        seriesCollection: bp.backpack.seriesCollection,
+        exclusive: bp.backpack.exclusive,
+        loungeflyTag: bp.backpack.loungeflyTag,
+        shopIfExclusive: bp.backpack.shopIfExclusive,
+        countryIfExclusive: bp.backpack.countryIfExclusive,
+        otherTags: bp.backpack.otherTags,
+        upc: bp.backpack.upc,
+        onlineStore: bp.backpack.onlineStore,
+        productURL: bp.backpack.productURL,
+        inCollection: bp.some(ub =>
+          bp.backpack.toString() === backpack._id.toString()
+        )
+      }));
 
       console.log("singleBackpackForShow: ", singleBackpackForShow);
 

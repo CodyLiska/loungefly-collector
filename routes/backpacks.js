@@ -22,8 +22,8 @@ router.get("/add", ensureAuth, getAddPage);
 router.post("/addToUserCollection", ensureAuth, addUserCreatedBackpack);
 
 // @desc    Show user's backpack collection page
-// @route   GET /backpacks
-router.get("/", ensureAuth, getUsersCollectionPage);
+// @route   GET backpacks/collection
+router.get("/collection", ensureAuth, getUsersCollectionPage);
 
 
 
