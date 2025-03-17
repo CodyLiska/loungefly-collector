@@ -21,12 +21,6 @@ router.get("/add", ensureAuth, getAddPage);
 // @route   POST /backpacks/addToUserCollection
 router.post("/addToUserCollection", ensureAuth, addUserCreatedBackpack);
 
-// @desc    Show user's backpack collection page
-// @route   GET backpacks/collection
-router.get("/collection", ensureAuth, getUsersCollectionPage);
-
-
-
 // @desc    Edit a backpack by id
 // @route   GET /backpacks/edit/:id
 router.get("/edit/:id", ensureAuth, editBackpack);
@@ -35,18 +29,12 @@ router.get("/edit/:id", ensureAuth, editBackpack);
 // @route   PUT /backpacks/:id
 // @route   DELETE /backpacks/:id
 router.route("/:id")
-  .put(ensureAuth, updateBackpack)
-  .delete(ensureAuth, deleteBackpack);
-
+.put(ensureAuth, updateBackpack)
+.delete(ensureAuth, deleteBackpack);
 
 // @desc    Add a backpack to users collection
 // @route   POST /backpacks/:id/add
 router.post("/:id/add", ensureAuth, addBackpackFromDatabase);
-////
-////
-////
-
-
 
 
 
@@ -61,5 +49,9 @@ router.get("/search", ensureAuth, getSearchPage);
 // @desc    Show a single backpack by id
 // @route   GET /backpacks/show/:id
 router.get("/show/:id", ensureAuth, getSingleBackpackById);
+
+// @desc    Show user's backpack collection page
+// @route   GET backpacks/collection
+router.get("/collection", ensureAuth, getUsersCollectionPage);
 
 module.exports = router;

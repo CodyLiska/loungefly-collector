@@ -53,9 +53,9 @@
 ---
 
 #### NOTES FOR NEXT SESSION
-- new backpack models, updated backpack collection DB to match new backpack models. 
-  - ### PROBLEM
-    - when using backpack_new collection; Your Collection shows backpack cards and Status & Added data but nothing else. Seems to be a disconnect between frontend and backend
-    - frontend doesn't match what backend is expecting for the backpack base properties
+- add to collection broken
+  - button in each backpack in search results
+  - circle with + in bottom right corner of screen
+- edit backpack broken
 
 - UPDATE ALL FORMS TO HAVE ALL PROPERTIES OF BOTH BACKPACK MODELS

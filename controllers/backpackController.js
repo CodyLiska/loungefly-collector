@@ -24,13 +24,16 @@ module.exports = {
       } = req.body;
 
       if (!backpackName) {
-        req.flash('error_msg', 'Backpack name is required. Other fields are optional.');
-        return res.redirect('/backpacks/add');
+        req.flash(
+          "error_msg",
+          "Backpack name is required. Other fields are optional."
+        );
+        return res.redirect("/backpacks/add");
       }
 
       if (!status) {
-        req.flash('error_msg', 'Please select either Owned or Wishlist status');
-        return res.redirect('/backpacks/add');
+        req.flash("error_msg", "Please select either Owned or Wishlist status");
+        return res.redirect("/backpacks/add");
       }
 
       const backpack = await Backpack.create({
@@ -51,9 +54,9 @@ module.exports = {
         backpack: backpack._id,
         user: req.user.id,
         heartLogo,
-        owned: status === 'owned',
-        wishlist: status === 'wishlist',
-        condition: status === 'owned' ? condition : null,
+        owned: status === "owned",
+        wishlist: status === "wishlist",
+        condition: status === "owned" ? condition : null,
         seriesCollection,
         onlineStore,
         purchasePrice: purchasePrice || null,
@@ -61,48 +64,57 @@ module.exports = {
         personalNotes,
       });
 
-      req.flash('success_msg', 'Backpack successfully added to your collection');
-      res.redirect('/backpacks');
+      req.flash(
+        "success_msg",
+        "Backpack successfully added to your collection"
+      );
+      res.redirect("/backpacks");
     } catch (err) {
-      console.error('Error adding backpack:', err);
-      req.flash('error_msg', 'Error adding backpack to collection');
-      res.render('error/500');
+      console.error("Error adding backpack:", err);
+      req.flash("error_msg", "Error adding backpack to collection");
+      res.render("error/500");
     }
   },
 
-  // get users collection
+  // GET: USER COLLECTION PAGE  ** MVP DONE 3/16 **
   getUsersCollectionPage: async (req, res) => {
     try {
       // Get filter from query params, default to 'all'
-      const filter = req.query.filter || 'all';
+      const filter = req.query.filter || "all";
 
       // Build filter query
       let filterQuery = { user: req.user.id };
-      if (filter === 'owned') {
+      if (filter === "owned") {
         filterQuery.owned = true;
-      } else if (filter === 'wishlist') {
+      } else if (filter === "wishlist") {
         filterQuery.wishlist = true;
       }
 
       const userBackpacks = await UserBackpack.find(filterQuery)
-        .populate('backpack')
+        .populate("backpack")
         .lean();
 
       // console.log("req.user: ", req.user)
       // console.log("userBackpacks: ", userBackpacks)
 
-      // Transform the data to include both backpack and userBackpack info
-      const backpacks = userBackpacks.map(ub => ({
-        image: ub.backpack?.image,
-        backpackName: ub.backpackName,
-        seriesCollection: ub.seriesCollection,
-        shopsIfExclusive: ub.shopIfExclusive,
+      const backpacks = userBackpacks.map((bp) => ({
+        image: bp.backpack.image,
+        backpackName: bp.backpack.backpackName,
+        purchasePrice: bp.backpack.purchasePrice,
+        seriesCollection: bp.backpack.seriesCollection,
+        onlineStore: bp.backpack.shopsIfExclusive,
+        purchaseDate: bp.backpack.purchaseDate,
+        owned: bp.owned,
+        wishlist: bp.wishlist,
+        inCollection: userBackpacks.some(
+          (ub) => ub.backpack.toString() === bp._id.toString()
+        ),
       }));
 
       res.render("backpacks/collection", {
         backpacks,
         isCollection: true,
-        currentFilter: filter
+        currentFilter: filter,
       });
     } catch (err) {
       console.error(err);
@@ -112,52 +124,29 @@ module.exports = {
 
   // get and display a single backpack (or this is a mapper to backpack base model)
   getSingleBackpackById: async (req, res) => {
-      const backpack = await Backpack.findById(req.params.id).lean();
+    // const backpackId = req.params.id;
+    // const backpack = await Backpack.findById(backpackId).lean();
 
-      console.log("singleBackpack: ", backpack);
+    const backpackSelected = await Backpack.findById(req.params.id).lean();
 
-      const singleBackpackForShow = backpack.map(bp => ({
-        _id: bp.backpack._id,
-        heartLogo: bp.backpack.heartLogo,
-        image: bp.backpack.image,
-        backpackName: bp.backpack.name,
-        size: bp.backpack.size,
-        hardTagSoftTag: bp.backpack.hardTagSoftTag,
-        dateReleased: bp.backpack.dateReleased,
-        bagStyle: bp.backpack.bagStyle,
-        patternType: bp.backpack.patternType,
-        sequins: bp.backpack.sequins,
-        franchise: bp.backpack.franchise,
-        seriesCollection: bp.backpack.seriesCollection,
-        exclusive: bp.backpack.exclusive,
-        loungeflyTag: bp.backpack.loungeflyTag,
-        shopIfExclusive: bp.backpack.shopIfExclusive,
-        countryIfExclusive: bp.backpack.countryIfExclusive,
-        otherTags: bp.backpack.otherTags,
-        upc: bp.backpack.upc,
-        onlineStore: bp.backpack.onlineStore,
-        productURL: bp.backpack.productURL,
-        inCollection: bp.some(ub =>
-          bp.backpack.toString() === backpack._id.toString()
-        )
-      }));
+    // console.log("Backpack: ", backpack);
 
-      console.log("singleBackpackForShow: ", singleBackpackForShow);
+    if (!backpackSelected) {
+      return res.status(404).send("Backpack not found");
+    }
 
-      res.render("backpacks/show", {
-        backpack: singleBackpackForShow,
-      });
+    res.render("backpacks/show", { backpackSelected });
   },
 
   // edit backpack
   editBackpack: async (req, res) => {
     try {
       const userBackpack = await UserBackpack.findById(req.params.id)
-        .populate('backpack')
+        .populate("backpack")
         .lean();
 
       if (!userBackpack) {
-        console.error('UserBackpack not found:', req.params.id);
+        console.error("UserBackpack not found:", req.params.id);
         return res.render("error/404");
       }
 
@@ -170,19 +159,24 @@ module.exports = {
             _id: userBackpack._id,
             name: userBackpack.backpack.backpackName,
             image: userBackpack.backpack.image,
-            purchasePrice: userBackpack.purchasePrice || userBackpack.backpack.purchasePrice,
-            seriesCollection: userBackpack.seriesCollection || userBackpack.backpack.seriesCollection,
-            onlineStore: userBackpack.onlineStore || userBackpack.backpack.onlineStore,
-            personalNotes: userBackpack.personalNotes || '',
-            condition: userBackpack.condition || 'New',
-            purchasePrice: userBackpack.purchasePrice || userBackpack.backpack.purchasePrice,
+            purchasePrice:
+              userBackpack.purchasePrice || userBackpack.backpack.purchasePrice,
+            seriesCollection:
+              userBackpack.seriesCollection ||
+              userBackpack.backpack.seriesCollection,
+            onlineStore:
+              userBackpack.onlineStore || userBackpack.backpack.onlineStore,
+            personalNotes: userBackpack.personalNotes || "",
+            condition: userBackpack.condition || "New",
+            purchasePrice:
+              userBackpack.purchasePrice || userBackpack.backpack.purchasePrice,
             owned: userBackpack.owned || false,
-            wishlist: userBackpack.wishlist || false
-          }
+            wishlist: userBackpack.wishlist || false,
+          },
         });
       }
     } catch (err) {
-      console.error('Error in editBackpack:', err);
+      console.error("Error in editBackpack:", err);
       return res.render("error/500");
     }
   },
@@ -208,8 +202,8 @@ module.exports = {
           purchasePrice: req.body.purchasePrice,
           condition: req.body.condition,
           personalNotes: req.body.personalNotes,
-          owned: req.body.owned === 'true',
-          wishlist: req.body.wishlist === 'true'
+          owned: req.body.owned === "true",
+          wishlist: req.body.wishlist === "true",
         },
         { new: true }
       );
@@ -243,7 +237,7 @@ module.exports = {
     }
   },
 
-  // get the search page
+  // GET: BACKPACK SEARCH PAGE  ** MVP DONE 3/16 **
   getSearchPage: async (req, res) => {
     try {
       const query = req.query.query;
@@ -255,22 +249,23 @@ module.exports = {
       // console.log('Search query:', query);
 
       // If no query, show empty search page
-      if (!query || query.trim() === '') {
+      if (!query || query.trim() === "") {
         return res.render("backpacks/index", {
           backpacks: [],
           isSearchResult: true,
-          searchQuery: ''
+          searchQuery: "",
         });
       }
 
       // Find backpacks matching the search query
+      // **NOTE**: the field names in your query MUST match the field names in your MongoDB document
       const searchQuery = {
         $or: [
-          { Name: { $regex: query, $options: 'i' } },  // Changed from 'name' to 'Name'
-          { Franchise: { $regex: query, $options: 'i' } },
-          { SeriesCollection: { $regex: query, $options: 'i' } },
-          { OtherTags: { $regex: query, $options: 'i' } }
-        ]
+          { backpackName: { $regex: query, $options: "i" } },
+          { franchise: { $regex: query, $options: "i" } },
+          { seriesCollection: { $regex: query, $options: "i" } },
+          { otherTags: { $regex: query, $options: "i" } },
+        ],
       };
 
       // Add debug logging
@@ -299,28 +294,28 @@ module.exports = {
         return res.render("backpacks/index", {
           backpacks: [],
           isSearchResult: true,
-          searchQuery: query
+          searchQuery: query,
         });
       }
 
       // Get user's collection to check which backpacks are already in it
       const userBackpacks = await UserBackpack.find({
-        user: req.user.id
+        user: req.user.id,
       }).lean();
 
-      console.log("backpacks", backpacks);
+      // console.log("backpacks", backpacks);
 
       // Add inCollection flag to each backpack
-      const backpacksWithCollectionStatus = backpacks.map(bp => ({
+      const backpacksWithCollectionStatus = backpacks.map((bp) => ({
+        _id: bp._id,
         image: bp.image,
         backpackName: bp.backpackName,
         purchasePrice: bp.purchasePrice,
         seriesCollection: bp.seriesCollection,
         onlineStore: bp.shopsIfExclusive,
-        purchaseDate: bp.purchaseDate,
-        inCollection: userBackpacks.some(ub => 
-          ub.backpack.toString() === bp._id.toString()
-        )
+        inCollection: userBackpacks.some(
+          (ub) => ub.backpack.toString() === bp._id.toString()
+        ),
       }));
 
       // console.log("backpacksWithCollectionStatus: " + JSON.stringify(backpacksWithCollectionStatus, null, 2));
@@ -328,7 +323,7 @@ module.exports = {
       // Prepare pagination data
       const pagination = {
         currentPage: page,
-        totalPages,  // Now totalPages is defined
+        totalPages, // Now totalPages is defined
         hasNextPage: page < totalPages,
         hasPrevPage: page > 1,
         nextPage: page + 1,
@@ -336,18 +331,18 @@ module.exports = {
         total,
         showing: {
           start: skip + 1,
-          end: Math.min(skip + limit, total)
-        }
+          end: Math.min(skip + limit, total),
+        },
       };
 
       res.render("backpacks/index", {
         backpacks: backpacksWithCollectionStatus,
         isSearchResult: true,
         searchQuery: query,
-        pagination
+        pagination,
       });
     } catch (err) {
-      console.error('Error in search:', err);
+      console.error("Error in search:", err);
       res.render("error/500");
     }
   },
@@ -365,12 +360,16 @@ module.exports = {
       // Check if user already has this backpack in their collection
       const existingUserBackpack = await UserBackpack.findOne({
         user: userId,
-        backpack: backpackId
+        backpack: backpackId,
       });
 
       if (existingUserBackpack) {
-        const message = encodeURIComponent("This backpack is already in your collection!");
-        return res.redirect(`/backpacks/search?query=${searchQuery}&page=${page}&success=${message}`);
+        const message = encodeURIComponent(
+          "This backpack is already in your collection!"
+        );
+        return res.redirect(
+          `/backpacks/search?query=${searchQuery}&page=${page}&success=${message}`
+        );
       }
 
       // Get backpack details for the success message
@@ -380,14 +379,18 @@ module.exports = {
       await UserBackpack.create({
         user: userId,
         backpack: backpackId,
-        wishlist: status === 'wishlist',
-        owned: status === 'owned',
-        condition: status === 'owned' ? condition : null
+        wishlist: status === "wishlist",
+        owned: status === "owned",
+        condition: status === "owned" ? condition : null,
       });
 
       // Redirect back to search results with success message
-      const message = encodeURIComponent(`${backpack.backpackName} added to your collection!`);
-      res.redirect(`/backpacks/search?query=${searchQuery}&page=${page}&success=${message}`);
+      const message = encodeURIComponent(
+        `${backpack.backpackName} added to your collection!`
+      );
+      res.redirect(
+        `/backpacks/search?query=${searchQuery}&page=${page}&success=${message}`
+      );
     } catch (err) {
       console.error(err);
       res.render("error/500");
@@ -403,19 +406,19 @@ module.exports = {
       // Find and delete the UserBackpack entry
       const userBackpack = await UserBackpack.findOneAndDelete({
         _id: userBackpackId,
-        user: userId
+        user: userId,
       });
 
       if (!userBackpack) {
-        req.flash('error_msg', 'Backpack not found in your collection');
-        return res.redirect('/backpacks');
+        req.flash("error_msg", "Backpack not found in your collection");
+        return res.redirect("/backpacks");
       }
 
-      req.flash('success_msg', 'Backpack removed from your collection');
-      res.redirect('/backpacks');
+      req.flash("success_msg", "Backpack removed from your collection");
+      res.redirect("/backpacks");
     } catch (err) {
-      console.error('Error removing backpack from collection:', err);
-      res.render('error/500');
+      console.error("Error removing backpack from collection:", err);
+      res.render("error/500");
     }
   },
 
@@ -427,33 +430,36 @@ module.exports = {
 
       const userBackpack = await UserBackpack.findOne({
         _id: userBackpackId,
-        user: userId
-      }).populate('backpack');
+        user: userId,
+      }).populate("backpack");
 
       if (!userBackpack) {
-        req.flash('error_msg', 'Backpack not found in your collection');
-        return res.redirect('/backpacks');
+        req.flash("error_msg", "Backpack not found in your collection");
+        return res.redirect("/backpacks");
       }
 
-      res.render('backpacks/edit', {
+      res.render("backpacks/edit", {
         backpack: {
           _id: userBackpack._id,
           name: userBackpack.backpack.name,
           image: userBackpack.backpack.image,
           purchasePrice: userBackpack.backpack.purchasePrice,
-          seriesCollection: userBackpack.seriesCollection || userBackpack.backpack.seriesCollection,
-          onlineStore: userBackpack.onlineStore || userBackpack.backpack.onlineStore,
+          seriesCollection:
+            userBackpack.seriesCollection ||
+            userBackpack.backpack.seriesCollection,
+          onlineStore:
+            userBackpack.onlineStore || userBackpack.backpack.onlineStore,
           purchasePrice: userBackpack.purchasePrice,
           purchaseDate: userBackpack.purchaseDate,
           personalNotes: userBackpack.personalNotes,
           condition: userBackpack.condition,
           owned: userBackpack.owned,
-          wishlist: userBackpack.wishlist
-        }
+          wishlist: userBackpack.wishlist,
+        },
       });
     } catch (err) {
-      console.error('Error loading edit page:', err);
-      res.render('error/500');
+      console.error("Error loading edit page:", err);
+      res.render("error/500");
     }
   },
 
@@ -469,24 +475,24 @@ module.exports = {
         purchaseDate,
         seriesCollection,
         onlineStore,
-        personalNotes
+        personalNotes,
       } = req.body;
 
       // Find the user's backpack
       const userBackpack = await UserBackpack.findOne({
         _id: userBackpackId,
-        user: userId
+        user: userId,
       });
 
       if (!userBackpack) {
-        req.flash('error_msg', 'Backpack not found in your collection');
-        return res.redirect('/backpacks');
+        req.flash("error_msg", "Backpack not found in your collection");
+        return res.redirect("/backpacks");
       }
 
       // Update the backpack with new values
-      userBackpack.owned = status === 'owned';
-      userBackpack.wishlist = status === 'wishlist';
-      userBackpack.condition = status === 'owned' ? condition : null;
+      userBackpack.owned = status === "owned";
+      userBackpack.wishlist = status === "wishlist";
+      userBackpack.condition = status === "owned" ? condition : null;
       userBackpack.purchasePrice = purchasePrice || null;
       userBackpack.purchaseDate = purchaseDate || null;
       userBackpack.seriesCollection = seriesCollection;
@@ -495,11 +501,11 @@ module.exports = {
 
       await userBackpack.save();
 
-      req.flash('success_msg', 'Your backpack has been updated');
-      res.redirect('/backpacks');
+      req.flash("success_msg", "Your backpack has been updated");
+      res.redirect("/backpacks");
     } catch (err) {
-      console.error('Error updating backpack:', err);
-      res.render('error/500');
+      console.error("Error updating backpack:", err);
+      res.render("error/500");
     }
   },
 };
