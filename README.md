@@ -59,3 +59,5 @@
 - edit backpack broken
 
 - UPDATE ALL FORMS TO HAVE ALL PROPERTIES OF BOTH BACKPACK MODELS
+
+- **macbook has current code now**
