@@ -60,6 +60,7 @@
 
 - UPDATE ALL FORMS TO HAVE ALL PROPERTIES OF BOTH BACKPACK MODELS
 
+- **macbook has current code now**
 
 # TODO: 
 - fix delete backpack from collection
