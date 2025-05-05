@@ -98,6 +98,7 @@ module.exports = {
       // console.log("userBackpacks: ", userBackpacks)
 
       const backpacks = userBackpacks.map((bp) => ({
+        _id: bp._id,
         image: bp.backpack.image,
         backpackName: bp.backpack.backpackName,
         purchasePrice: bp.backpack.purchasePrice,
@@ -138,77 +139,81 @@ module.exports = {
     res.render("backpacks/show", { backpackSelected });
   },
 
-  // edit backpack
+  // GET: EDIT BACKPACK PAGE  ** MVP DONE 3/24 **
   editBackpack: async (req, res) => {
     try {
-      const userBackpack = await UserBackpack.findById(req.params.id)
-        .populate("backpack")
-        .lean();
+      // Find the UserBackpack by ID to ensure it belongs to the user
+      const userBackpack = await UserBackpack.findOne({
+        _id: req.params.id,
+        user: req.user.id,
+      }).populate("backpack");
 
       if (!userBackpack) {
-        console.error("UserBackpack not found:", req.params.id);
-        return res.render("error/404");
+        req.flash("error", "Backpack not found in your collection");
+        return res.redirect("/backpacks/collection");
       }
 
-      // Make sure user owns this backpack
-      if (userBackpack.user.toString() !== req.user.id) {
-        res.redirect("/backpacks");
-      } else {
-        res.render("backpacks/edit", {
-          backpack: {
-            _id: userBackpack._id,
-            name: userBackpack.backpack.backpackName,
-            image: userBackpack.backpack.image,
-            purchasePrice:
-              userBackpack.purchasePrice || userBackpack.backpack.purchasePrice,
-            seriesCollection:
-              userBackpack.seriesCollection ||
-              userBackpack.backpack.seriesCollection,
-            onlineStore:
-              userBackpack.onlineStore || userBackpack.backpack.onlineStore,
-            personalNotes: userBackpack.personalNotes || "",
-            condition: userBackpack.condition || "New",
-            purchasePrice:
-              userBackpack.purchasePrice || userBackpack.backpack.purchasePrice,
-            owned: userBackpack.owned || false,
-            wishlist: userBackpack.wishlist || false,
-          },
-        });
-      }
+      const backpackToEdit = {
+        _id: userBackpack.backpack._id,
+        name: userBackpack.backpack.name,
+        image: userBackpack.backpack.image,
+        purchasePrice: userBackpack.backpack.purchasePrice,
+        seriesCollection: userBackpack.backpack.seriesCollection,
+        onlineStore: userBackpack.backpack.onlineStore,
+        purchaseDate: userBackpack.backpack.purchaseDate,
+        personalNotes: userBackpack.personalNotes,
+        condition: userBackpack.condition,
+        owned: userBackpack.owned,
+        wishlist: userBackpack.wishlist,
+        ...userBackpack.backpack.toObject(),
+      };
+
+      console.log("backpackToEdit: ", backpackToEdit);
+
+      res.render("backpacks/edit", {
+        backpackToEdit,
+        userBackpackId: req.params.id,
+      });
     } catch (err) {
-      console.error("Error in editBackpack:", err);
-      return res.render("error/500");
+      console.error(err);
+      req.flash("error", "Error loading edit page");
+      res.redirect("/backpacks/collection");
     }
   },
 
-  // update backpack
+  // GET: UPDATE BACKPACK PAGE  ** MVP DONE 3/24 **
   updateBackpack: async (req, res) => {
     try {
-      const userBackpack = await UserBackpack.findById(req.params.id);
+      const userBackpack = await UserBackpack.findOne({
+        _id: req.params.id,
+        user: req.user.id,
+      }).populate("backpack");
 
       if (!userBackpack) {
+        req.flash("error", "Backpack not found in your collection");
         return res.render("error/404");
       }
 
-      // Make sure user owns this backpack
-      if (userBackpack.user.toString() !== req.user.id) {
-        return res.redirect("/backpacks");
-      }
+      // Update both userBackpack and backpack
+      // userBackpack.owned = req.body.owned === "true";
+      // userBackpack.wishlist = req.body.wishlist === "true";
+      userBackpack.condition = req.body.condition;
+      userBackpack.purchasePrice = req.body.purchasePrice;
+      userBackpack.personalNotes = req.body.personalNotes;
+      console.log("userBackpack: ", userBackpack);
 
-      // Update the userBackpack
-      await UserBackpack.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          purchasePrice: req.body.purchasePrice,
-          condition: req.body.condition,
-          personalNotes: req.body.personalNotes,
-          owned: req.body.owned === "true",
-          wishlist: req.body.wishlist === "true",
-        },
-        { new: true }
-      );
+      // Additional Fields from Backpack Model
+      userBackpack.backpack.name = req.body.name; // not implemented yet
+      userBackpack.backpack.seriesCollection = req.body.seriesCollection;
+      userBackpack.website = req.body.website;
+      userBackpack.customTags = req.body.customTags;
+      userBackpack.addedToCollection = req.body.addedToCollection;
 
-      res.redirect("/backpacks");
+      await userBackpack.save();
+      // await backpack.save();
+
+      req.flash("success", "Backpack updated successfully");
+      res.redirect("/backpacks/collection");
     } catch (err) {
       console.error("Error updating backpack:", err);
       return res.render("error/500");
@@ -418,93 +423,6 @@ module.exports = {
       res.redirect("/backpacks");
     } catch (err) {
       console.error("Error removing backpack from collection:", err);
-      res.render("error/500");
-    }
-  },
-
-  // Edit backpack in collection
-  getEditPage: async (req, res) => {
-    try {
-      const userBackpackId = req.params.id;
-      const userId = req.user.id;
-
-      const userBackpack = await UserBackpack.findOne({
-        _id: userBackpackId,
-        user: userId,
-      }).populate("backpack");
-
-      if (!userBackpack) {
-        req.flash("error_msg", "Backpack not found in your collection");
-        return res.redirect("/backpacks");
-      }
-
-      res.render("backpacks/edit", {
-        backpack: {
-          _id: userBackpack._id,
-          name: userBackpack.backpack.name,
-          image: userBackpack.backpack.image,
-          purchasePrice: userBackpack.backpack.purchasePrice,
-          seriesCollection:
-            userBackpack.seriesCollection ||
-            userBackpack.backpack.seriesCollection,
-          onlineStore:
-            userBackpack.onlineStore || userBackpack.backpack.onlineStore,
-          purchasePrice: userBackpack.purchasePrice,
-          purchaseDate: userBackpack.purchaseDate,
-          personalNotes: userBackpack.personalNotes,
-          condition: userBackpack.condition,
-          owned: userBackpack.owned,
-          wishlist: userBackpack.wishlist,
-        },
-      });
-    } catch (err) {
-      console.error("Error loading edit page:", err);
-      res.render("error/500");
-    }
-  },
-
-  // Update backpack in collection
-  updateBackpack: async (req, res) => {
-    try {
-      const userBackpackId = req.params.id;
-      const userId = req.user.id;
-      const {
-        status,
-        condition,
-        purchasePrice,
-        purchaseDate,
-        seriesCollection,
-        onlineStore,
-        personalNotes,
-      } = req.body;
-
-      // Find the user's backpack
-      const userBackpack = await UserBackpack.findOne({
-        _id: userBackpackId,
-        user: userId,
-      });
-
-      if (!userBackpack) {
-        req.flash("error_msg", "Backpack not found in your collection");
-        return res.redirect("/backpacks");
-      }
-
-      // Update the backpack with new values
-      userBackpack.owned = status === "owned";
-      userBackpack.wishlist = status === "wishlist";
-      userBackpack.condition = status === "owned" ? condition : null;
-      userBackpack.purchasePrice = purchasePrice || null;
-      userBackpack.purchaseDate = purchaseDate || null;
-      userBackpack.seriesCollection = seriesCollection;
-      userBackpack.onlineStore = onlineStore;
-      userBackpack.personalNotes = personalNotes;
-
-      await userBackpack.save();
-
-      req.flash("success_msg", "Your backpack has been updated");
-      res.redirect("/backpacks");
-    } catch (err) {
-      console.error("Error updating backpack:", err);
       res.render("error/500");
     }
   },

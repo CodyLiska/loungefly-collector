@@ -32,16 +32,6 @@ const UserBackpackSchema = new mongoose.Schema({
     default: null,
     maxLength: 6,
   },
-  addedToCollectionDate: {
-    type: Date,
-    default: null,
-    validate: {
-      validator: function (v) {
-        return !v || v <= new Date();
-      },
-      message: "Purchase date cannot be in the future",
-    },
-  },
   personalNotes: {
     type: String,
     default: null,

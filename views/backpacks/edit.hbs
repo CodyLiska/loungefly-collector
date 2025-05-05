@@ -10,7 +10,7 @@
   </div>
 
   <div class="bg-white rounded-2xl shadow-sm p-8">
-    <form action="/backpacks/{{_id}}?_method=PUT" method="POST" class="space-y-6">
+    <form action="/backpacks/edit/{{userBackpackId}}?_method=PUT" method="POST" class="space-y-6">
       
       <div class="space-y-5">
         <!-- Backpack Name -->
@@ -82,14 +82,14 @@
 
         <!-- Series or Collection -->
         <div>
-          <label for="seriesTitle" class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="seriesCollection" class="block text-sm font-medium text-gray-700 mb-2">
             Series or Collection
           </label>
           <input 
             type="text" 
-            id="seriesTitle" 
-            name="seriesTitle"
-            value="{{seriesTitle}}"
+            id="seriesCollection" 
+            name="seriesCollection"
+            value="{{seriesCollection}}"
             class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all duration-200"
             placeholder="e.g., Disney, Marvel, Star Wars"
           />
@@ -130,16 +130,16 @@
           </div>
         </div>
 
-        <!-- Purchase Date -->
+        <!-- Added To Collection -->
         <div>
-          <label for="purchaseDate" class="block text-sm font-medium text-gray-700 mb-2">
-            Purchase Date
+          <label for="addedToCollectionDate" class="block text-sm font-medium text-gray-700 mb-2">
+            Added To Collection
           </label>
           <input 
             type="date" 
-            id="purchaseDate" 
-            name="purchaseDate"
-            value="{{formatDate purchaseDate 'YYYY-MM-DD'}}"
+            id="addedToCollection" 
+            name="addedToCollection"
+            value="{{formatDate addedToCollection 'YYYY-MM-DD'}}"
             class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all duration-200"
           />
         </div>

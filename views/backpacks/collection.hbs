@@ -114,22 +114,22 @@
             </button>
           </form>
           {{else}}
-          <a href="/backpacks/show/{{_id}}"
+          {{!-- <a href="/backpacks/show/{{_id}}"
             class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200">
             <i class="fas fa-info-circle mr-2"></i> View Details
           </a>
           {{#if inCollection}}
             <button disabled
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-xl cursor-not-allowed">
-              <i class="fas fa-check mr-2"></i> In Collection
-            </button>
-          {{else}}
+              <i class="fas fa-check mr-2"></i> In Collection 
+            </button> --}}
+          {{!-- {{else}}
             <button type="button"
               onclick="showModal('{{_id}}', '{{backpackName}}', '{{../searchQuery}}', '{{../pagination.currentPage}}')"
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-md transition-all duration-200">
               <i class="fas fa-plus mr-2"></i> Add to Collection
-            </button>
-          {{/if}}
+            </button> --}}
+          {{!-- {{/if}} --}}
           {{/if}}
         </div>
       </div>

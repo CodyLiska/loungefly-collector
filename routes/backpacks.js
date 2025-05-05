@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const { ensureAuth } = require("../middleware/auth");
 const {
-  getAddPage,
-  addUserCreatedBackpack,
-  getUsersCollectionPage,
+  getSearchPage,
   getSingleBackpackById,
+  getUsersCollectionPage,
   editBackpack,
   updateBackpack,
+  getAddPage,
+  addUserCreatedBackpack,
   deleteBackpack,
-  getSearchPage,
   addBackpackFromDatabase,
 } = require("../controllers/backpackController");
 
@@ -28,9 +28,9 @@ router.get("/edit/:id", ensureAuth, editBackpack);
 // @desc    Update and Delete routes for backpack
 // @route   PUT /backpacks/:id
 // @route   DELETE /backpacks/:id
-router.route("/:id")
-.put(ensureAuth, updateBackpack)
-.delete(ensureAuth, deleteBackpack);
+// router.route("/:id")
+// .put(ensureAuth, updateBackpack)
+// .delete(ensureAuth, deleteBackpack);
 
 // @desc    Add a backpack to users collection
 // @route   POST /backpacks/:id/add
@@ -53,5 +53,13 @@ router.get("/show/:id", ensureAuth, getSingleBackpackById);
 // @desc    Show user's backpack collection page
 // @route   GET backpacks/collection
 router.get("/collection", ensureAuth, getUsersCollectionPage);
+
+// @desc    Edit a backpack by id
+// @route   GET /backpacks/edit/:id
+router.get("/edit/:id", ensureAuth, editBackpack);
+
+// @desc    Update a backpack
+// @route   PUT /backpacks/:id
+router.put("/edit/:id", ensureAuth, updateBackpack);
 
 module.exports = router;
