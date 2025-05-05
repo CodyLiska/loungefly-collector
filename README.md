@@ -12,7 +12,29 @@
 - https://cdnjs.com/
 --- 
 
-### TODO LIST
+# GITHUB has current code
+
+## TODO: 
+- fix delete backpack from collection
+- fix edit backpack
+- fix images not displaying
+
+### NOTES FOR NEXT SESSION
+- add to collection broken
+  - button in each backpack in search results
+  - circle with + in bottom right corner of screen
+- edit backpack broken
+- UPDATE ALL FORMS TO HAVE ALL PROPERTIES OF BOTH BACKPACK MODELS
+
+#### Mongo DB
+- Loungefly-newModelDB = current up to date database [currently being used]
+- LoungeFly = database source data
+ 
+
+---
+
+- Older notes below:
+
 #### - APP.JS:
 - [ ] Clean up and verify secure
 #### - CONTROLLERS:
@@ -52,17 +74,4 @@
   - [ ] make 'Total Backpacks', 'Owned', 'Wishlist' boxes clickable and take the user to the appropriate page
 ---
 
-#### NOTES FOR NEXT SESSION
-- add to collection broken
-  - button in each backpack in search results
-  - circle with + in bottom right corner of screen
-- edit backpack broken
 
-- UPDATE ALL FORMS TO HAVE ALL PROPERTIES OF BOTH BACKPACK MODELS
-
-- **macbook has current code now**
-
-# TODO: 
-- fix delete backpack from collection
-- fix edit backpack
-- fix images not displaying
