@@ -1,36 +1,114 @@
 const mongoose = require("mongoose");
 
 const BackpackSchema = new mongoose.Schema({
-  bg_name: {
+  heartLogo: {
     type: String,
-    required: true,
-    trim: true
+    default: null,
+    trim: true,
   },
-  bg_image: {
+  image: {
     type: String,
-    default: '/img/no-image.jpg'
+    default: "/img/no-image.jpg",
   },
-  bg_price: {
-    type: Number,
-    required: true,
-    min: 0
-  },
-  bg_series: {
+  matchingWallet: {
     type: String,
-    trim: true
+    default: null,
+    trim: true,
+    maxLength: 100,
   },
-  bg_link: {
+  name: {
     type: String,
-    trim: true
+    //required: true,
+    trim: true,
+    maxLength: 100,
   },
-  bg_fromSite: {
+  size: {
     type: String,
-    trim: true
+    default: null,
+    trim: true,
+    maxLength: 100,
   },
-  createdAt: {
+  // Backpack Tags: Hard Tag/Soft Tag
+  hardTagOrSoftTag: {
+    type: String,
+    default: null,
+    maxLength: 8,
+  },
+  dateReleased: {
     type: Date,
-    default: Date.now
-  }
+    default: null,
+  },
+  // Backpack styles: Crossbody/Handbag/Tote/Backpack/etc
+  bagStyle: {
+    type: String,
+  },
+  // Backpack Patterns: Cosplay/AOP/etc
+  patternType: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  // Backpack Sequins: Y/N
+  sequins: {
+    type: String,
+    default: null,
+    maxLength: 1,
+  },
+  franchise: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  seriesCollection: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  exclusive: {
+    type: String,
+    default: null,
+    maxLength: 1,
+  },
+  loungeflyTag: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  shopsIfExclusive: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  countryIfExclusive: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  otherTags: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  matchingWalletAlt: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  upc: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  onlineStore: {
+    type: String,
+    default: null,
+    maxLength: 50,
+  },
+  productURL: {
+    type: String,
+    default: null,
+    maxLength: 1000,
+  },
 });
 
 module.exports = mongoose.model("Backpack", BackpackSchema);

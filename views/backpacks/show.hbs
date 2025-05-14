@@ -1,102 +1,171 @@
-{{!-- Backpack Details Page with Modern Design --}}
+{{!-- Backpack Details Page --}}
 <div class="max-w-6xl mx-auto">
   <div class="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-3xl p-8 mb-8">
     <h1 class="text-3xl font-bold mb-2">
       <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-        {{backpack.bg_name}}
+        {{backpackSelected.backpackName}}
       </span>
     </h1>
-    <p class="text-gray-600">View detailed information about this Loungefly backpack</p>
   </div>
 
   <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
     <div class="grid grid-cols-1 md:grid-cols-2">
-      {{!-- Image Section --}}
+      {{!-- Backpack Image Section --}}
       <div class="relative h-full">
         <img 
-          src="{{backpack.bg_image}}" 
-          alt="{{backpack.bg_name}}" 
+          src="{{backpackSelected.image}}" 
+          alt="{{backpackSelected.backpackName}}" 
           class="w-full h-full object-cover object-center"
           style="max-height: 500px;"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
       </div>
 
-      {{!-- Details Section --}}
+      {{!-- Backpack Details Section --}}
       <div class="p-8">
         <div class="space-y-6">
-          <div>
-            <h2 class="text-sm font-medium text-gray-500 mb-1">Price</h2>
-            <p class="text-2xl font-bold text-primary">${{backpack.bg_price}}</p>
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Size</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.size}}</p>
+          </div>
+
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Hard or Soft Tag</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.hardTagOrSoftTag}}</p>
+          </div>
+
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Date Released</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.dateReleased}}</p>
+          </div>
+
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Backpack Style</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.bagStyle}}</p>
+          </div>
+
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Pattern Type</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.patternType}}</p>
+          </div>
+
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Sequins</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.sequins}}</p>
           </div>
 
           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Franchise</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.franchise}}</p>
+          </div>
+
+           <div>
             <h2 class="text-sm font-medium text-gray-500 mb-1">Series/Collection</h2>
-            <p class="text-lg text-gray-900">{{backpack.bg_series}}</p>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.seriesCollection}}</p>
+          </div>
+
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Exclusive</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.exclusive}}</p>
+          </div>
+
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Loungefly Tag</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.loungeflyTag}}</p>
+          </div>
+
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Exclusive Shope</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.shopsIfExclusive}}</p>
           </div>
 
           <div>
-            <h2 class="text-sm font-medium text-gray-500 mb-1">Store</h2>
-            <p class="text-lg text-gray-900">{{backpack.bg_fromSite}}</p>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Exclusive Country</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.countryIfExclusive}}</p>
           </div>
 
-          {{#if backpack.bg_inCollection}}
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Other Tags</h2>
+            <p class="text-2xl font-bold text-primary">{{backpackSelected.otherTags}}</p>
+          </div>
+
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Matching Wallet</h2>
+            <p class="text-lg text-gray-900">{{backpackSelected.matchingWalletAlt}}</p>
+          </div>
+
+          <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">UPC</h2>
+            <p class="text-lg text-gray-900">{{backpackSelected.upc}}</p>
+          </div>
+
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Online Store</h2>
+            <p class="text-lg text-gray-900">{{backpackSelected.onlineStore}}</p>
+          </div>
+
+           <div>
+            <h2 class="text-sm font-medium text-gray-500 mb-1">Product Link</h2>
+            <p class="text-lg text-gray-900">{{backpackSelected.productURL}}</p>
+          </div>
+
+          {{#if inCollection}}
           <div>
             <h2 class="text-sm font-medium text-gray-500 mb-1">Status</h2>
             <p class="text-lg">
-              {{#if backpack.bg_owned}}
+              {{#if owned}}
                 <span class="text-green-600">Owned</span>
-              {{else if backpack.bg_wishlist}}
+              {{else if wishlist}}
                 <span class="text-blue-600">Wishlist</span>
               {{/if}}
             </p>
           </div>
 
-          {{#if backpack.bg_condition}}
+          {{!-- {{#if condition}}
           <div>
             <h2 class="text-sm font-medium text-gray-500 mb-1">Condition</h2>
-            <p class="text-lg text-gray-900">{{backpack.bg_condition}}</p>
+            <p class="text-lg text-gray-900">{{condition}}</p>
           </div>
-          {{/if}}
+          {{/if}} --}}
 
-          {{#if backpack.bg_personalNotes}}
+          {{#if personalNotes}}
           <div>
             <h2 class="text-sm font-medium text-gray-500 mb-1">Personal Notes</h2>
-            <p class="text-lg text-gray-900">{{backpack.bg_personalNotes}}</p>
+            <p class="text-lg text-gray-900">{{backpackSelected.personalNotes}}</p>
           </div>
           {{/if}}
 
-          {{#if backpack.bg_addedToCollection}}
+          {{#if addedToCollectionDate}}
           <div>
             <h2 class="text-sm font-medium text-gray-500 mb-1">Added to Collection</h2>
-            <p class="text-lg text-gray-900">{{formatDate backpack.bg_addedToCollection 'MMMM Do YYYY'}}</p>
-            <p class="text-sm text-gray-500">at {{formatDate backpack.bg_addedToCollection 'h:mm a'}}</p>
+            <p class="text-lg text-gray-900">{{formatDate backpackSelected.addedToCollectionDate 'MMMM Do YYYY'}}</p>
+            <p class="text-sm text-gray-500">at {{formatDate backpackSelected.addedToCollectionDate 'h:mm a'}}</p>
           </div>
           {{/if}}
           {{/if}}
 
-          {{#if backpack.bg_link}}
+          {{#if productURL}}
           <div>
             <h2 class="text-sm font-medium text-gray-500 mb-1">Product Link</h2>
             <a 
-              href="{{backpack.bg_link}}" 
+              href="{{backpackSelected.productURL}}" 
               target="_blank"
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-md transition-all duration-200"
             >
-              <i class="fas fa-external-link-alt mr-2"></i> View on {{backpack.bg_fromSite}}
+              <i class="fas fa-external-link-alt mr-2"></i> View on {{backpackSelected.productURL}}
             </a>
           </div>
           {{/if}}
 
           <div class="flex items-center space-x-4 pt-8 mt-8 border-t border-gray-100">
-            {{#if backpack.bg_inCollection}}
+            {{#if inCollection}}
               <button disabled
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-xl cursor-not-allowed">
                 <i class="fas fa-check mr-2"></i> In Collection
               </button>
             {{else}}
               <button type="button"
-                onclick="showModal('{{backpack._id}}', '{{backpack.bg_name}}', '{{searchQuery}}', '{{page}}')"
+                onclick="showModal('{{_id}}', '{{backpackName}}', '{{searchQuery}}', '{{page}}')"
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-md transition-all duration-200">
                 <i class="fas fa-plus mr-2"></i> Add to Collection
               </button>

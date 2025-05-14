@@ -1,5 +1,11 @@
+  {{!-- *******************************
+  *************************************
+
+    COLLECTION PAGE'S FILTER SECTION
+
+  *************************************
+  ************************************* --}}
 <div class="min-h-screen bg-gray-50">
-  <!-- Search Section -->
   {{#if isCollection}}
   <div class="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-3xl p-8 mb-8">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -8,19 +14,19 @@
       {{!-- Filter Buttons --}}
       <div class="flex items-center gap-2">
         <a 
-          href="/backpacks?filter=all" 
+          href="/backpacks/collection?filter=all" 
           class="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{#if (eq currentFilter 'all')}}bg-primary text-white{{else}}bg-white text-gray-700 hover:bg-gray-50{{/if}}"
         >
           All
         </a>
         <a 
-          href="/backpacks?filter=owned" 
+          href="/backpacks/collection?filter=owned" 
           class="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{#if (eq currentFilter 'owned')}}bg-green-600 text-white{{else}}bg-white text-gray-700 hover:bg-gray-50{{/if}}"
         >
           <i class="fas fa-check-circle mr-1"></i> Owned
         </a>
         <a 
-          href="/backpacks?filter=wishlist" 
+          href="/backpacks/collection?filter=wishlist" 
           class="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{#if (eq currentFilter 'wishlist')}}bg-blue-600 text-white{{else}}bg-white text-gray-700 hover:bg-gray-50{{/if}}"
         >
           <i class="fas fa-heart mr-1"></i> Wishlist
@@ -48,13 +54,19 @@
   </div>
   {{/if}}
 
-  <!-- Results Grid -->
+  {{!-- *******************************
+  *************************************
+
+    COLLECTION PAGE'S RESULTS GRID
+
+  *************************************
+  ************************************* --}}
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
     {{#each backpacks}}
     <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
       <div class="relative">
         <img src="{{image}}" alt="{{backpackName}}"
-          class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105 lazyload" />
+          class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" />
         <div
           class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         </div>
@@ -65,10 +77,7 @@
           <h2 class="text-xl font-semibold text-gray-900 line-clamp-2 mb-2">
             <a href="/backpacks/show/{{_id}}" class="hover:text-primary transition-colors duration-200">{{backpackName}}</a>
           </h2>
-          {{!-- <span class="text-lg font-bold text-primary">${{purchasePrice}}</span> --}}
-          {{!-- <span class="text-lg font-bold text-primary">${{purchasePrice}}</span> --}}
         </div>
-
         <div class="space-y-3 text-sm text-gray-600 mb-6">
           <p class="flex justify-between items-center">
             <span class="font-medium">Series:</span>
@@ -91,7 +100,7 @@
           </p>
           {{/if}}
         </div>
-
+        
         <div class="flex items-center justify-between pt-4 border-t border-gray-100">
           {{#if ../isCollection}}
           <a href="/backpacks/edit/{{_id}}"
@@ -105,22 +114,22 @@
             </button>
           </form>
           {{else}}
-          <a href="/backpacks/show/{{_id}}"
+          {{!-- <a href="/backpacks/show/{{_id}}"
             class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200">
             <i class="fas fa-info-circle mr-2"></i> View Details
           </a>
           {{#if inCollection}}
             <button disabled
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-xl cursor-not-allowed">
-              <i class="fas fa-check mr-2"></i> In Collection
-            </button>
-          {{else}}
+              <i class="fas fa-check mr-2"></i> In Collection 
+            </button> --}}
+          {{!-- {{else}}
             <button type="button"
               onclick="showModal('{{_id}}', '{{backpackName}}', '{{../searchQuery}}', '{{../pagination.currentPage}}')"
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-md transition-all duration-200">
               <i class="fas fa-plus mr-2"></i> Add to Collection
-            </button>
-          {{/if}}
+            </button> --}}
+          {{!-- {{/if}} --}}
           {{/if}}
         </div>
       </div>

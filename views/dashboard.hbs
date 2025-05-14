@@ -1,9 +1,8 @@
-{{!-- Welcome Section with Modern Gradient --}}
+{{!-- Welcome Section --}}
 <div class="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-3xl p-8 mb-8">
   <h1 class="text-3xl font-bold text-gray-900 mb-2">
     <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-      Welcome {{name}} 👋
-    </span>
+      Welcome {{name}} </span>👋    
   </h1>
   <p class="text-gray-600">Here's an overview of your Loungefly collection</p>
 </div>
@@ -39,15 +38,14 @@
     <div class="bg-white p-6 rounded-2xl shadow-sm">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl font-bold text-gray-900">Recently Added</h2>
-        <a href="/backpacks" class="text-sm text-primary hover:text-primary/80">View All</a>
+        <a href="/backpacks/collection" class="text-sm text-primary hover:text-primary/80">View All</a>
       </div>
       <div class="space-y-4">
         {{#each recentlyAdded}}
           <div class="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50">
-            <img src="{{bg_image}}" alt="{{bg_name}}" class="w-16 h-16 object-cover rounded-lg">
+            <img src="{{image}}" alt="{{backpackName}}" class="w-16 h-16 object-cover rounded-lg">
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-900 truncate">{{bg_name}}</p>
-              <p class="text-sm text-gray-500">{{bg_series}}</p>
+              <p class="text-sm font-medium text-gray-900 truncate">{{backpackName}}</p>
               <p class="text-xs text-gray-400">Added {{formatDate addedAt "MMM Do YYYY"}}</p>
             </div>
             <div class="flex-shrink-0">
@@ -74,28 +72,12 @@
           <div class="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50">
             <span class="text-sm font-medium text-gray-900">{{series}}</span>
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-              {{count}} backpack{{#unless (eq count 1)}}s{{/unless}}
+              {{seriesCount}} backpack{{#unless (eq seriesCount 1)}}s{{/unless}}
             </span>
           </div>
         {{/each}}
       </div>
     </div>
-  </div>
-
-  {{!-- Quick Actions --}}
-  <div class="mt-8 flex flex-wrap gap-4">
-    <a 
-      href="/backpacks" 
-      class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary rounded-xl hover:shadow-md transition-all duration-200"
-    >
-      <i class="fas fa-th-large mr-2"></i> View Collection
-    </a>
-    <a 
-      href="/backpacks/search" 
-      class="inline-flex items-center px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-200"
-    >
-      <i class="fas fa-search mr-2"></i> Find More
-    </a>
   </div>
 
 {{else}}

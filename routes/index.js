@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { ensureAuth, ensureGuest } = require("../middleware/auth");
-
 const UserBackpack = require("../models/UserBackpack");
-const User = require("../models/User");
 
 // @desc    Login/Landing page
 // @route   GET /
@@ -19,7 +17,7 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
   try {
     // Get all user's backpacks
     const userBackpacks = await UserBackpack.find({ user: req.user.id })
-      .populate('backpack')
+      .populate('backpack')  
       .lean();
 
     // Calculate statistics
@@ -31,31 +29,30 @@ router.get("/dashboard", ensureAuth, async (req, res) => {
 
     // Get recently added backpacks (last 3)
     const recentlyAdded = userBackpacks
-      .sort((a, b) => b.addedToCollection - a.addedToCollection)
+      .sort((a, b) => b.addedToCollectionDate - a.addedToCollectionDate)
       .slice(0, 3)
       .map(ub => ({
-        _id: ub._id,
-        bg_name: ub.backpack.bg_name,
-        bg_image: ub.backpack.bg_image,
-        bg_price: ub.purchasePrice || ub.backpack.bg_price,
-        bg_series: ub.backpack.bg_series,
+        image: ub.backpack?.image,
+        backpackName: ub.backpack?.backpackName,
         owned: ub.owned,
         wishlist: ub.wishlist,
-        addedAt: ub.addedToCollection
+        addedToCollectionDate: ub.addedToCollectionDate,
       }));
+
+      console.log("recentlyAdded", recentlyAdded); 
 
     // Group backpacks by series
     const seriesCount = userBackpacks.reduce((acc, ub) => {
-      const series = ub.backpack.bg_series || 'Uncategorized';
+      const series = ub.seriesCollection || 'Uncategorized';
       acc[series] = (acc[series] || 0) + 1;
       return acc;
     }, {});
 
-    // Sort series by count and get top 5
+    // Sort franchises by count and get top 5
     const topSeries = Object.entries(seriesCount)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
-      .map(([series, count]) => ({ series, count }));
+      .map(([series, seriesCount]) => ({ series, seriesCount }));
 
     res.render("dashboard", {
       name: req.user.displayName,
