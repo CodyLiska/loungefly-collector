@@ -1,2 +1,7 @@
 node_modules
 /config/config.env
+/dev_files/databaseFiles
+/dev_files/img-downloader-app
+/dev_files/lf-sheet-scraper
+/dev_files/LoungeFly Collector app
+/dev_files/Loungefly-Collector Database
