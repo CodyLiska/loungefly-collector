@@ -1,5 +1,7 @@
 # TODO List to get to MVP
 
+> **Note:** Maybe work on downloading the images and storing them in the database before troubleshooting them not showing up, or showing up after clicking back in the browser
+
 ### Dashboard
 - [ ] backpack images don't show up in Recently Added
 
