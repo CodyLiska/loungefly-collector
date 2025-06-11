@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // method override middleware
-app.use(methodOverride('_method'));
+app.use(methodOverride("_method"));
 
 // ORIGINAL IMPLEMENTATION
 // app.use(methodOverride(function (req, res) {
@@ -51,21 +51,15 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // handlebars helpers
-const { formatDate, truncate, editIcon, select, eq } = require("./helpers/hbs");
+const hbsHelpers = require("./helpers/hbs");
 
 // handlebars
 app.engine(
   ".hbs",
   exphbs.engine({
-    helpers: {
-      formatDate,
-      truncate,
-      editIcon,
-      select,
-      eq
-    },
-    defaultLayout: "main",
     extname: ".hbs",
+    defaultLayout: "main",
+    helpers: hbsHelpers,
   })
 );
 app.set("view engine", ".hbs");
@@ -85,9 +79,9 @@ app.use(flash());
 
 // Set global variables for flash messages
 app.use((req, res, next) => {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error');
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  res.locals.error = req.flash("error");
   next();
 });
 
