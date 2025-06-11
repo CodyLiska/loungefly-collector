@@ -1,6 +1,7 @@
 const Backpack = require("../models/Backpack");
 const UserBackpack = require("../models/UserBackpack");
 const User = require("../models/User");
+const { generatePresignedUrl } = require("../helpers/s3Helper");
 
 module.exports = {
   // display add.hbs page
@@ -129,6 +130,13 @@ module.exports = {
     // const backpack = await Backpack.findById(backpackId).lean();
 
     const backpackSelected = await Backpack.findById(req.params.id).lean();
+
+    // AWS s3 implementation
+    // if (backpackSelected.image) {
+    //   backpackSelected.imageUrl = await generatePresignedUrl(
+    //     backpackSelected.image
+    //   );
+    // }
 
     // console.log("Backpack: ", backpack);
 

@@ -37,9 +37,21 @@ module.exports = {
       .replace(
         new RegExp(' value="' + selected + '"'),
         '$& selected="selected"'
-      )
+      );
   },
   eq: function (a, b) {
     return a === b;
-  }
+  },
+
+  // Pick helper: returns an object with only specified keys
+  pick: function (object, ...keys) {
+    const options = keys.pop(); // Handlebars passes the options object as the last argument
+    const picked = {};
+    keys.forEach((key) => {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        picked[key] = object[key];
+      }
+    });
+    return picked;
+  },
 };

@@ -1,0 +1,25 @@
+<div class="space-y-3">
+  {{#if owned}}
+    <div><h3 class="text-sm text-gray-500">Status</h3><p
+        class="text-green-600"
+      >Owned</p></div>
+  {{else if wishlist}}
+    <div><h3 class="text-sm text-gray-500">Status</h3><p
+        class="text-blue-600"
+      >Wishlist</p></div>
+  {{/if}}
+
+  {{#if backpackSelected.personalNotes}}
+    <div><h3 class="text-sm text-gray-500">Personal Notes</h3><p
+      >{{backpackSelected.personalNotes}}</p></div>
+  {{/if}}
+
+  {{#if addedToCollectionDate}}
+    <div>
+      <h3 class="text-sm text-gray-500">Added</h3>
+      <p>{{formatDate backpackSelected.addedToCollectionDate "MMMM Do YYYY"}}
+        at
+        {{formatDate backpackSelected.addedToCollectionDate "h:mm a"}}</p>
+    </div>
+  {{/if}}
+</div>

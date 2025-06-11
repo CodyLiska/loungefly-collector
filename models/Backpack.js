@@ -10,6 +10,11 @@ const BackpackSchema = new mongoose.Schema({
     type: String,
     default: "/img/no-image.jpg",
   },
+  imageUrl: {
+    type: String,
+    default: null,
+    trim: true,
+  },
   matchingWallet: {
     type: String,
     default: null,
